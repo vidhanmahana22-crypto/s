@@ -41,11 +41,15 @@ iframe {
 }
 
 .poem {
-  text-align:left;
-  white-space:pre-line;
   max-width:700px;
-  margin:auto;
-  line-height:1.6;
+  margin:40px auto;
+  padding:20px;
+  text-align:left;
+  line-height:1.7;
+  background: rgba(255,255,255,0.05);
+  border-radius:15px;
+  box-shadow:0 0 20px rgba(255,153,204,0.2);
+  white-space:pre-line;
 }
 </style>
 </head>
@@ -60,6 +64,7 @@ iframe {
 
 <script>
 let score = 0;
+let total = 10;
 
 function start(){
   document.getElementById("bgMusic").play().catch(()=>{});
@@ -69,7 +74,8 @@ function start(){
 function nextPage(n){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById("page"+n).classList.add("active");
-  if(n===13) showResult();
+
+  if(n===12) showResult();
 }
 
 function correct(){ score++; }
@@ -84,13 +90,22 @@ function move(btn){
 
 function showResult(){
   let text="";
-  if(score>=8) text="Elite performance 😎 clearly you know me too well";
-  else if(score>=5) text="Good good 😏 acceptable effort";
-  else if(score>=3) text="Hmm 🤨 something feels off";
-  else text="Very suspicious behavior 😤 investigation needed";
+
+  if(score >= 8){
+    text = "Elite performance 😎 clearly you know me too well";
+  }
+  else if(score >= 5){
+    text = "Good good 😏 acceptable effort";
+  }
+  else if(score >= 3){
+    text = "Hmm 🤨 something feels off";
+  }
+  else{
+    text = "Very suspicious behavior 😤 investigation needed";
+  }
 
   document.getElementById("result").innerHTML =
-    "Score: "+score+"/10<br><br>"+text;
+    "Score: " + score + "/" + total + "<br><br>" + text;
 }
 </script>
 
@@ -187,12 +202,24 @@ function showResult(){
 <p>Whenever you're sad... just pause and listen 🌸</p>
 <iframe src="https://www.youtube.com/embed/asUDUqgC2V8"></iframe>
 <br><br>
-<button onclick="nextPage(14)">Final Message</button>
+<button onclick="nextPage(14)">Next</button>
 </div>
 
-<!-- FINAL MESSAGE WITH POEM -->
+<!-- MESSAGE BEFORE POEM -->
 <div id="page14" class="page">
-<h1>💖 Final Message</h1>
+<h1>💖 A Small Message</h1>
+<p>
+You are genuinely someone very special ✨<br><br>
+Keep smiling, keep dancing 💃<br>
+And never change the way you are 🌸
+</p>
+<br>
+<button onclick="nextPage(15)">Here's something for you</button>
+</div>
+
+<!-- POEM PAGE -->
+<div id="page15" class="page">
+<h1>💌 Here's a poem for you</h1>
 
 <div class="poem">
 Mai aur meri tanhai aksar yeah baate karte hai
