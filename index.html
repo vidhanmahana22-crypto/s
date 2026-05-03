@@ -1,152 +1,245 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday Game ❤️</title>
+<title>For You 💖</title>
 
 <style>
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: Arial;
   text-align: center;
-  overflow-x: hidden;
-  background: radial-gradient(circle, #1a0033, #000);
-  color: white;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+  color: #333;
 }
 
-canvas { position: fixed; top:0; left:0; z-index:-1; }
-
-.page { display:none; padding:30px; }
+.page { display:none; padding:20px; }
 .active { display:block; }
 
 button {
-  padding:12px 20px;
+  padding:10px 20px;
   margin:10px;
   border:none;
-  border-radius:25px;
-  background: linear-gradient(45deg,#ff4d6d,#ff99ac);
+  border-radius:10px;
+  background:#ff4d6d;
   color:white;
   font-size:16px;
   cursor:pointer;
 }
 
-h1 { text-shadow:0 0 15px #ff99cc; }
-
-iframe {
-  width:90%;
-  height:220px;
-  border-radius:15px;
-  margin-top:20px;
+.question {
+  margin:20px;
+  font-size:18px;
 }
 
 .poem {
   max-width:700px;
-  margin:40px auto;
-  padding:20px;
-  text-align:left;
-  line-height:1.7;
-  background: rgba(255,255,255,0.05);
-  border-radius:15px;
-  box-shadow:0 0 20px rgba(255,153,204,0.2);
+  margin:auto;
+  text-align:center;
   white-space:pre-line;
+  font-size:16px;
+  line-height:1.6;
 }
 </style>
-</head>
 
+</head>
 <body>
 
-<canvas id="bg"></canvas>
-
-<!-- ✅ Hidden YouTube Background Music -->
-<iframe 
-  id="ytMusic"
-  width="0" 
-  height="0"
-  src=""
-  frameborder="0"
-  allow="autoplay">
-</iframe>
-
-<script>
-let score = 0;
-let total = 10;
-
-function start(){
-  // Start music AFTER user click (important)
-  document.getElementById("ytMusic").src =
-    "https://www.youtube.com/embed/dodDteh-m3Q?autoplay=1&mute=0&loop=1&playlist=dodDteh-m3Q";
-
-  nextPage(2);
-}
-
-function nextPage(n){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById("page"+n).classList.add("active");
-
-  if(n===12) showResult();
-}
-
-function correct(){ score++; }
-
-function annoyingYes(){ alert("Wrong answer 😤 try again"); }
-
-function move(btn){
-  btn.style.position="absolute";
-  btn.style.left=Math.random()*80+"%";
-  btn.style.top=Math.random()*80+"%";
-}
-
-function showResult(){
-  let text="";
-
-  if(score >= 8){
-    text = "Elite performance 😎 clearly you know me too well";
-  }
-  else if(score >= 5){
-    text = "Good good 😏 acceptable effort";
-  }
-  else if(score >= 3){
-    text = "Hmm 🤨 something feels off";
-  }
-  else{
-    text = "Very suspicious behavior 😤 investigation needed";
-  }
-
-  document.getElementById("result").innerHTML =
-    "Score: " + score + "/" + total + "<br><br>" + text;
-}
-</script>
+<!-- 🎵 AUDIO -->
+<audio id="bgMusic" loop>
+  <source src="shahrukh-khan-deepika-padukone.mp3" type="audio/mpeg">
+</audio>
 
 <!-- PAGE 1 -->
 <div id="page1" class="page active">
-<h1>🎉 Happy Birthday ❤️</h1>
-<p>Let's test you 😏</p>
+<h1>🎉 Happy Birthday 🎉</h1>
+<p>Ready for something special? 😏</p>
 <button onclick="start()">Start</button>
 </div>
 
 <!-- QUESTIONS -->
 <div id="page2" class="page">
-<h1>😂 Q1</h1>
-<p>Am I annoying?</p>
-<button onclick="annoyingYes()">Yes 😅</button>
-<button onclick="correct(); nextPage(3)">No 😇</button>
+
+<div class="question">
+Best movie we watched?
+<br>
+<button onclick="ans(1)">Anand</button>
+<button onclick="ans(0)">Brahmastra</button>
+<button onclick="ans(0)">Random guess</button>
 </div>
 
+<div class="question">
+Who has better navigation sense?
+<br>
+<button onclick="ans(1)">You</button>
+<button onclick="ans(0)">Me</button>
+</div>
+
+<div class="question">
+Who annoys more?
+<br>
+<button onclick="annoyCheck(1)">Me 😈</button>
+<button onclick="annoyCheck(0)">You 😤</button>
+</div>
+
+<div class="question">
+Who laughs at lame jokes?
+<br>
+<button onclick="ans(1)">You 😂</button>
+<button onclick="ans(0)">No one</button>
+</div>
+
+<div class="question">
+Who eats more?
+<br>
+<button onclick="ans(1)">You 🍔</button>
+<button onclick="ans(0)">Me</button>
+</div>
+
+<button onclick="nextPage('page3')">Finish</button>
+</div>
+
+<!-- REPORT -->
 <div id="page3" class="page">
-<h1>😏 Q2</h1>
-<p>Your favorite person?</p>
-<button onclick="correct(); nextPage(4)">Me 😎</button>
-<button onclick="correct(); nextPage(4)">Still me 😂</button>
+<h2>📊 Report Card</h2>
+<p id="result"></p>
+<button onclick="nextPage('page4')">Next</button>
 </div>
 
+<!-- KRISHNA PAGE -->
 <div id="page4" class="page">
-<h1>🤭 Q3</h1>
-<p>Will you miss me?</p>
-<button onclick="correct(); nextPage(5)">Yes 🥺</button>
-<button onclick="move(this)">No 😒</button>
+<h2>🦚 For when you feel low</h2>
+<p>
+Whenever you feel sad, just remember…  
+Krishna is always with you 🌸  
+And also… someone annoying is always there 😏
+</p>
+<button onclick="nextPage('page5')">Next</button>
 </div>
 
+<!-- FINAL MESSAGE -->
 <div id="page5" class="page">
-<h1>🎬 Q4</h1>
-<p>Best
+<h2>💌 Final Message</h2>
+<p>
+You are honestly one of the most fun, chaotic and amazing people 😄  
+Thanks for all the memories, laughs, and madness.  
+Stay the same… maybe slightly less annoying 😏
+</p>
+<button onclick="nextPage('page6')">Here’s something for you</button>
+</div>
+
+<!-- POEM -->
+<div id="page6" class="page">
+<h1>💖 Here's a poem for you</h1>
+
+<div class="poem">
+Mai aur meri tanhai aksar yeah baate karte hai
+
+Ki mai khoya sa ,tu mera rasta si
+Jab mai roya tha ,tu ek hasi si
+Mai soya tha ,tu khwab si
+
+Ki Mai koi bhool sa ,tu ek fool si
+Mere har gham ko ek marham si
+Mai gulab jamun sa tu pani puri si
+Meri adhuri kahani ko karne puri si
+Meri khamosi me ek shor si
+Mera dil churane aayi ek chor si 
+
+Ki mai hu akela tu saath thi
+Mai hu bawla sa tu hoshiyari si
+Mujh bhakt ke liye ek bhakti si
+Mai hu padhaku sa tu kitab si
+Meri saamaan zindagi me ek vardaan si
+
+Ki mai shaant sa tu sukoon shanti si
+Mai karta paap sa tu hai ek suniti si
+Mai kalm sa tu personal diary si
+Mere har shrap ke liye ek blessing si
+
+Mai insomniac sa tu sleeping beauty si
+Mai hu sawla sa tu hai gori si
+Mere har kadam par ek sanam si
+Mere andhere me chaand si
+Mai bin buddhi sa tu samruddhi si
+
+Mai aur meri tanhai aksar yeah baate karte hai 
+
+Ki kitna tanha rheta tha Mai ,tu meri zindagi me bahar banke aaya
+Mujhpe hi jokes sunake, tune mujhko hi hasaya
+
+Purple Theodore valentine blessing se bhi mujhko, tune hi milwaya
+Mere bure se samay Ko, tune 11:11 banaya
+
+Choti choti baato par Roya jab mai, tune mujhe lamha lamha samjhaya
+Kitni minnate karke Maine, tujhko yu kamaya
+
+Motki khe kar Maine, tujhko bhot chidaya
+Toh wordle khelte hue mera, tune bhi majak udaya
+
+Thick shake Peete Peete mujhko, tune mysore Tirupati na jaane kitna ghumaya
+Fashion sense dekh kar mera, tune zanwaro ka photo laya
+
+Jab bore hua mai,tab tune badi door se aaye hai dikhaya
+Phir mere lame jokes sunkar,tune bhot chillaya
+
+Mujhko geet Ramayan padwa pahad ke baare me batakar, tune Anand bhot dilaya
+Meri zindagi me aake, tune saare ghamo Ko bhulaya
+
+Meri harkate dekh kar bhi,tune dance yu karaya
+Phir maar maar ke mujhko, tune patience bhot azmaya
+
+Chand ko dekh kar mujhko, tera hi khayal bhaya
+Bhikhre se Dil Ko mere ,teri aakhon ne hi sul jhaya
+
+Maaf karna mujhko jo  ,tujhe itna sataya
+Maaf karna mujhko jo , tujhe kabhi rulaya
+Thank you bolke aakhir mujhko, kar deti tu kyu paraya
+
+Poem yeah likh kar Maine, tere sang promise nibhaya
+3 June Ko aakhir Maine, tera din manaya
+3 June Ko aakhir Maine, tera Dil lubhaya
+
+Mai aur meri tanhai aksar yeah baate karte
+</div>
+
+</div>
+
+<script>
+let score = 0;
+
+function start(){
+  document.getElementById('bgMusic').play();
+  nextPage('page2');
+}
+
+function ans(val){
+  score += val;
+}
+
+function annoyCheck(val){
+  if(val === 1){
+    score += 1;
+  } else {
+    alert("Wrong answer 😤 Select 'Me' to proceed");
+  }
+}
+
+function nextPage(id){
+  let pages = document.querySelectorAll('.page');
+  pages.forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  if(id === 'page3'){
+    let text="";
+    if(score>=4) text="Legend level 😎 You know everything";
+    else if(score>=2) text="Decent 😏 but can improve";
+    else text="Very disappointing 😤";
+
+    document.getElementById("result").innerText = text + " | Score: " + score + "/5";
+  }
+}
+</script>
+
+</body>
+</html>
