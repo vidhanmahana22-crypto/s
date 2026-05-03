@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday ❤️</title>
+<title>Birthday Game ❤️</title>
 
 <style>
 body {
@@ -15,43 +15,29 @@ body {
   color: white;
 }
 
-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
+canvas { position: fixed; top:0; left:0; z-index:-1; }
 
-.page {
-  display: none;
-  padding: 40px;
-}
-
-.active {
-  display: block;
-}
+.page { display:none; padding:40px; }
+.active { display:block; }
 
 button {
-  padding: 12px 20px;
-  margin: 10px;
-  border: none;
-  border-radius: 25px;
-  background: linear-gradient(45deg, #ff4d6d, #ff99ac);
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
+  padding:12px 20px;
+  margin:10px;
+  border:none;
+  border-radius:25px;
+  background: linear-gradient(45deg,#ff4d6d,#ff99ac);
+  color:white;
+  font-size:16px;
+  cursor:pointer;
 }
 
-h1 {
-  font-size: 28px;
-  text-shadow: 0 0 15px #ff99cc;
-}
+h1 { text-shadow:0 0 15px #ff99cc; }
 
 iframe {
-  width: 90%;
-  height: 220px;
-  border-radius: 15px;
-  margin-top: 20px;
+  width:90%;
+  height:220px;
+  border-radius:15px;
+  margin-top:20px;
 }
 </style>
 </head>
@@ -61,148 +47,174 @@ iframe {
 <canvas id="bg"></canvas>
 
 <audio id="bgMusic" autoplay loop>
-  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_1b3c3b2e0b.mp3" type="audio/mp3">
+<source src="https://cdn.pixabay.com/audio/2023/03/28/audio_1b3c3b2e0b.mp3">
 </audio>
 
-<!-- PAGE 1 -->
-<div id="page1" class="page active">
-  <h1>🎉 Happy Birthday ❤️</h1>
-  <p>I made something fun for you 😏</p>
-  <button onclick="start()">Start</button>
-</div>
-
-<!-- PAGE 2 -->
-<div id="page2" class="page">
-  <h1>😂 First Question</h1>
-  <p>Am I annoying?</p>
-  <button onclick="annoyingYes()">Yes 😅</button>
-  <button onclick="nextPage(3)">No 😇</button>
-</div>
-
-<!-- PAGE 3 -->
-<div id="page3" class="page">
-  <h1>😏 Be honest</h1>
-  <p>Who is your favorite person?</p>
-  <button onclick="nextPage(4)">Me 😎</button>
-  <button onclick="nextPage(4)">Still me 😂</button>
-</div>
-
-<!-- PAGE 4 -->
-<div id="page4" class="page">
-  <h1>🤭 One more</h1>
-  <p>Will you miss me if I disappear?</p>
-  <button onclick="nextPage(5)">Yes obviously 🥺</button>
-  <button onclick="moveButton(this)">No 😒</button>
-</div>
-
-<!-- PAGE 5 -->
-<div id="page5" class="page">
-  <h1>💃 Last one</h1>
-  <p>Dance or Sleep?</p>
-  <button onclick="nextPage(6)">Dance 💃</button>
-  <button onclick="nextPage(6)">Sleep 😴</button>
-</div>
-
-<!-- PAGE 6 (KRISHNA PAGE) -->
-<div id="page6" class="page">
-  <h1>💙 For when you feel low</h1>
-  <p>
-    Whenever you feel sad...<br><br>
-    Listen to this and just breathe 🌸<br>
-    Everything will be okay 💫
-  </p>
-
-  <iframe src="https://www.youtube.com/embed/asUDUqgC2V8" allowfullscreen></iframe>
-
-  <br><br>
-  <button onclick="nextPage(7)">Next</button>
-</div>
-
-<!-- PAGE 7 FINAL -->
-<div id="page7" class="page">
-  <h1>💖 Final Message</h1>
-  <p id="typeText"></p>
-</div>
-
 <script>
-function start() {
+let score = 0;
+
+function start(){
   document.getElementById("bgMusic").play().catch(()=>{});
   nextPage(2);
 }
 
-function nextPage(n) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById("page" + n).classList.add("active");
-
-  if(n === 7) typeWriter();
+function nextPage(n){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page"+n).classList.add("active");
+  if(n===13) showResult();
 }
 
-function annoyingYes() {
-  alert("Wrong answer 😤 try again");
+function correct(){ score++; }
+
+function annoyingYes(){ alert("Wrong answer 😤 try again"); }
+
+function move(btn){
+  btn.style.position="absolute";
+  btn.style.left=Math.random()*80+"%";
+  btn.style.top=Math.random()*80+"%";
 }
 
-function moveButton(btn) {
-  btn.style.position = "absolute";
-  btn.style.left = Math.random()*80 + "%";
-  btn.style.top = Math.random()*80 + "%";
+function showResult(){
+  let text="";
+  if(score>=8) text="Elite performance 😎 clearly you know me too well";
+  else if(score>=5) text="Good good 😏 acceptable effort";
+  else if(score>=3) text="Hmm 🤨 something feels off";
+  else text="Very suspicious behavior 😤 investigation needed";
+
+  document.getElementById("result").innerHTML =
+    "Score: "+score+"/10<br><br>"+text;
 }
+</script>
 
-// typewriter
-const message = "You are genuinely special to me 💖 Keep smiling, keep dancing 💃 Happy Birthday ❤️";
-let i = 0;
+<!-- PAGE 1 -->
+<div id="page1" class="page active">
+<h1>🎉 Happy Birthday ❤️</h1>
+<p>Let's test you 😏</p>
+<button onclick="start()">Start</button>
+</div>
 
-function typeWriter() {
-  if (i < message.length) {
-    document.getElementById("typeText").innerHTML += message.charAt(i);
-    i++;
-    setTimeout(typeWriter, 40);
-  }
-}
+<!-- Q1 -->
+<div id="page2" class="page">
+<h1>😂 Q1</h1>
+<p>Am I annoying?</p>
+<button onclick="annoyingYes()">Yes 😅</button>
+<button onclick="correct(); nextPage(3)">No 😇</button>
+</div>
 
+<!-- Q2 -->
+<div id="page3" class="page">
+<h1>😏 Q2</h1>
+<p>Your favorite person?</p>
+<button onclick="correct(); nextPage(4)">Me 😎</button>
+<button onclick="correct(); nextPage(4)">Still me 😂</button>
+</div>
+
+<!-- Q3 -->
+<div id="page4" class="page">
+<h1>🤭 Q3</h1>
+<p>Will you miss me?</p>
+<button onclick="correct(); nextPage(5)">Yes 🥺</button>
+<button onclick="move(this)">No 😒</button>
+</div>
+
+<!-- Q4 -->
+<div id="page5" class="page">
+<h1>🎬 Q4</h1>
+<p>Best movie we watched?</p>
+<button onclick="correct(); nextPage(6)">Aanand ❤️</button>
+<button onclick="nextPage(6)">Brahmastra 😂</button>
+<button onclick="nextPage(6)">Mahavatar Narasimha 🔥</button>
+</div>
+
+<!-- Q5 -->
+<div id="page6" class="page">
+<h1>💃 Q5</h1>
+<p>Dance or Sleep?</p>
+<button onclick="correct(); nextPage(7)">Dance 💃</button>
+<button onclick="nextPage(7)">Sleep 😴</button>
+</div>
+
+<!-- Q6 -->
+<div id="page7" class="page">
+<h1>😏 Q6</h1>
+<p>Who understands you better?</p>
+<button onclick="correct(); nextPage(8)">Me 😎</button>
+<button onclick="move(this)">No one 😶</button>
+</div>
+
+<!-- Q7 -->
+<div id="page8" class="page">
+<h1>😌 Q7</h1>
+<p>Who makes your day better?</p>
+<button onclick="correct(); nextPage(9)">Me 😎</button>
+<button onclick="nextPage(9)">Food 🍕</button>
+</div>
+
+<!-- Q8 (navigation) -->
+<div id="page9" class="page">
+<h1>🧭 Q8</h1>
+<p>Who has better sense of direction?</p>
+<button onclick="correct(); nextPage(10)">Me 😎</button>
+<button onclick="nextPage(10)">Google Maps 😂</button>
+</div>
+
+<!-- Q9 -->
+<div id="page10" class="page">
+<h1>😂 Q9</h1>
+<p>Who is more dramatic?</p>
+<button onclick="nextPage(11)">You 😆</button>
+<button onclick="correct(); nextPage(11)">Me 😌</button>
+</div>
+
+<!-- Q10 -->
+<div id="page11" class="page">
+<h1>😏 Q10</h1>
+<p>Who gives best suggestions?</p>
+<button onclick="correct(); nextPage(12)">Me 😎</button>
+<button onclick="nextPage(12)">Internet 😂</button>
+</div>
+
+<!-- Krishna -->
+<div id="page12" class="page">
+<h1>💙 For when you feel low</h1>
+<p>Whenever you're sad... just pause and listen 🌸</p>
+<iframe src="https://www.youtube.com/embed/asUDUqgC2V8"></iframe>
+<br><br>
+<button onclick="nextPage(13)">Next</button>
+</div>
+
+<!-- RESULT -->
+<div id="page13" class="page">
+<h1>📊 Your Report Card</h1>
+<p id="result"></p>
+</div>
+
+<script>
 // particles
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-
+let particles=[];
 for(let i=0;i<80;i++){
-  particles.push({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    r: Math.random()*2,
-    d: Math.random()*1
-  });
+particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2,d:Math.random()});
 }
 
 function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = "rgba(255,153,204,0.6)";
-  ctx.beginPath();
-
-  for(let i=0;i<particles.length;i++){
-    let p = particles[i];
-    ctx.moveTo(p.x,p.y);
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
-  }
-
-  ctx.fill();
-  update();
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(255,153,204,0.6)";
+ctx.beginPath();
+particles.forEach(p=>{
+ctx.moveTo(p.x,p.y);
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
+});
+ctx.fill();
+particles.forEach(p=>{
+p.y+=p.d;
+if(p.y>canvas.height){p.y=0;p.x=Math.random()*canvas.width;}
+});
 }
-
-function update(){
-  for(let i=0;i<particles.length;i++){
-    let p = particles[i];
-    p.y += p.d;
-    if(p.y > canvas.height){
-      p.y = 0;
-      p.x = Math.random()*canvas.width;
-    }
-  }
-}
-
 setInterval(draw,33);
 </script>
 
