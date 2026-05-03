@@ -43,7 +43,7 @@ button {
 }
 
 h1 {
-  font-size: 30px;
+  font-size: 28px;
   text-shadow: 0 0 15px #ff99cc;
 }
 
@@ -60,7 +60,6 @@ iframe {
 
 <canvas id="bg"></canvas>
 
-<!-- Auto Music -->
 <audio id="bgMusic" autoplay loop>
   <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_1b3c3b2e0b.mp3" type="audio/mp3">
 </audio>
@@ -68,51 +67,66 @@ iframe {
 <!-- PAGE 1 -->
 <div id="page1" class="page active">
   <h1>🎉 Happy Birthday ❤️</h1>
-  <p>I made something magical for you ✨</p>
+  <p>I made something fun for you 😏</p>
   <button onclick="start()">Start</button>
 </div>
 
 <!-- PAGE 2 -->
 <div id="page2" class="page">
-  <h1>😂 Quick Question</h1>
+  <h1>😂 First Question</h1>
   <p>Am I annoying?</p>
-  <button onclick="nextPage(3)">Yes 😅</button>
+  <button onclick="annoyingYes()">Yes 😅</button>
   <button onclick="nextPage(3)">No 😇</button>
 </div>
 
 <!-- PAGE 3 -->
 <div id="page3" class="page">
-  <h1>😏 Be Honest</h1>
-  <p>Your favorite person?</p>
+  <h1>😏 Be honest</h1>
+  <p>Who is your favorite person?</p>
   <button onclick="nextPage(4)">Me 😎</button>
   <button onclick="nextPage(4)">Still me 😂</button>
 </div>
 
 <!-- PAGE 4 -->
 <div id="page4" class="page">
-  <h1>💙 Krishna Vibes</h1>
-  <iframe src="https://www.youtube.com/embed/asUDUqgC2V8" allowfullscreen></iframe>
-  <br>
-  <button onclick="nextPage(5)">Next</button>
+  <h1>🤭 One more</h1>
+  <p>Will you miss me if I disappear?</p>
+  <button onclick="nextPage(5)">Yes obviously 🥺</button>
+  <button onclick="moveButton(this)">No 😒</button>
 </div>
 
 <!-- PAGE 5 -->
 <div id="page5" class="page">
-  <h1>🎶 Just for you</h1>
-  <iframe src="https://www.youtube.com/embed/8Ff7zq4XG0I" allowfullscreen></iframe>
-  <br>
-  <button onclick="nextPage(6)">Final</button>
+  <h1>💃 Last one</h1>
+  <p>Dance or Sleep?</p>
+  <button onclick="nextPage(6)">Dance 💃</button>
+  <button onclick="nextPage(6)">Sleep 😴</button>
 </div>
 
-<!-- PAGE 6 -->
+<!-- PAGE 6 (KRISHNA PAGE) -->
 <div id="page6" class="page">
+  <h1>💙 For when you feel low</h1>
+  <p>
+    Whenever you feel sad...<br><br>
+    Listen to this and just breathe 🌸<br>
+    Everything will be okay 💫
+  </p>
+
+  <iframe src="https://www.youtube.com/embed/asUDUqgC2V8" allowfullscreen></iframe>
+
+  <br><br>
+  <button onclick="nextPage(7)">Next</button>
+</div>
+
+<!-- PAGE 7 FINAL -->
+<div id="page7" class="page">
   <h1>💖 Final Message</h1>
   <p id="typeText"></p>
 </div>
 
 <script>
 function start() {
-  document.getElementById("bgMusic").play().catch(() => {});
+  document.getElementById("bgMusic").play().catch(()=>{});
   nextPage(2);
 }
 
@@ -120,11 +134,21 @@ function nextPage(n) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById("page" + n).classList.add("active");
 
-  if(n === 6) typeWriter();
+  if(n === 7) typeWriter();
 }
 
-// Typewriter effect
-const message = "No matter what happens... You will always be special to me 💖 Keep smiling, keep dancing 💃 Happy Birthday ❤️";
+function annoyingYes() {
+  alert("Wrong answer 😤 try again");
+}
+
+function moveButton(btn) {
+  btn.style.position = "absolute";
+  btn.style.left = Math.random()*80 + "%";
+  btn.style.top = Math.random()*80 + "%";
+}
+
+// typewriter
+const message = "You are genuinely special to me 💖 Keep smiling, keep dancing 💃 Happy Birthday ❤️";
 let i = 0;
 
 function typeWriter() {
@@ -135,7 +159,7 @@ function typeWriter() {
   }
 }
 
-// Background animation (particles)
+// particles
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
@@ -155,13 +179,13 @@ for(let i=0;i<80;i++){
 
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = "rgba(255, 153, 204, 0.6)";
+  ctx.fillStyle = "rgba(255,153,204,0.6)";
   ctx.beginPath();
 
   for(let i=0;i<particles.length;i++){
     let p = particles[i];
-    ctx.moveTo(p.x, p.y);
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
+    ctx.moveTo(p.x,p.y);
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
   }
 
   ctx.fill();
@@ -179,7 +203,7 @@ function update(){
   }
 }
 
-setInterval(draw, 33);
+setInterval(draw,33);
 </script>
 
 </body>
