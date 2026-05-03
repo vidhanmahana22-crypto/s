@@ -10,14 +10,14 @@ body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   text-align: center;
-  overflow: hidden;
+  overflow-x: hidden;
   background: radial-gradient(circle, #1a0033, #000);
   color: white;
 }
 
 canvas { position: fixed; top:0; left:0; z-index:-1; }
 
-.page { display:none; padding:40px; }
+.page { display:none; padding:30px; }
 .active { display:block; }
 
 button {
@@ -38,6 +38,14 @@ iframe {
   height:220px;
   border-radius:15px;
   margin-top:20px;
+}
+
+.poem {
+  text-align:left;
+  white-space:pre-line;
+  max-width:700px;
+  margin:auto;
+  line-height:1.6;
 }
 </style>
 </head>
@@ -93,7 +101,7 @@ function showResult(){
 <button onclick="start()">Start</button>
 </div>
 
-<!-- Q1 -->
+<!-- QUESTIONS -->
 <div id="page2" class="page">
 <h1>😂 Q1</h1>
 <p>Am I annoying?</p>
@@ -101,7 +109,6 @@ function showResult(){
 <button onclick="correct(); nextPage(3)">No 😇</button>
 </div>
 
-<!-- Q2 -->
 <div id="page3" class="page">
 <h1>😏 Q2</h1>
 <p>Your favorite person?</p>
@@ -109,7 +116,6 @@ function showResult(){
 <button onclick="correct(); nextPage(4)">Still me 😂</button>
 </div>
 
-<!-- Q3 -->
 <div id="page4" class="page">
 <h1>🤭 Q3</h1>
 <p>Will you miss me?</p>
@@ -117,7 +123,6 @@ function showResult(){
 <button onclick="move(this)">No 😒</button>
 </div>
 
-<!-- Q4 -->
 <div id="page5" class="page">
 <h1>🎬 Q4</h1>
 <p>Best movie we watched?</p>
@@ -126,7 +131,6 @@ function showResult(){
 <button onclick="nextPage(6)">Mahavatar Narasimha 🔥</button>
 </div>
 
-<!-- Q5 -->
 <div id="page6" class="page">
 <h1>💃 Q5</h1>
 <p>Dance or Sleep?</p>
@@ -134,7 +138,6 @@ function showResult(){
 <button onclick="nextPage(7)">Sleep 😴</button>
 </div>
 
-<!-- Q6 -->
 <div id="page7" class="page">
 <h1>😏 Q6</h1>
 <p>Who understands you better?</p>
@@ -142,7 +145,6 @@ function showResult(){
 <button onclick="move(this)">No one 😶</button>
 </div>
 
-<!-- Q7 -->
 <div id="page8" class="page">
 <h1>😌 Q7</h1>
 <p>Who makes your day better?</p>
@@ -150,7 +152,6 @@ function showResult(){
 <button onclick="nextPage(9)">Food 🍕</button>
 </div>
 
-<!-- Q8 (navigation) -->
 <div id="page9" class="page">
 <h1>🧭 Q8</h1>
 <p>Who has better sense of direction?</p>
@@ -158,7 +159,6 @@ function showResult(){
 <button onclick="nextPage(10)">Google Maps 😂</button>
 </div>
 
-<!-- Q9 -->
 <div id="page10" class="page">
 <h1>😂 Q9</h1>
 <p>Who is more dramatic?</p>
@@ -166,7 +166,6 @@ function showResult(){
 <button onclick="correct(); nextPage(11)">Me 😌</button>
 </div>
 
-<!-- Q10 -->
 <div id="page11" class="page">
 <h1>😏 Q10</h1>
 <p>Who gives best suggestions?</p>
@@ -174,19 +173,98 @@ function showResult(){
 <button onclick="nextPage(12)">Internet 😂</button>
 </div>
 
-<!-- Krishna -->
+<!-- REPORT -->
 <div id="page12" class="page">
+<h1>📊 Your Report Card</h1>
+<p id="result"></p>
+<br>
+<button onclick="nextPage(13)">Next</button>
+</div>
+
+<!-- KRISHNA -->
+<div id="page13" class="page">
 <h1>💙 For when you feel low</h1>
 <p>Whenever you're sad... just pause and listen 🌸</p>
 <iframe src="https://www.youtube.com/embed/asUDUqgC2V8"></iframe>
 <br><br>
-<button onclick="nextPage(13)">Next</button>
+<button onclick="nextPage(14)">Final Message</button>
 </div>
 
-<!-- RESULT -->
-<div id="page13" class="page">
-<h1>📊 Your Report Card</h1>
-<p id="result"></p>
+<!-- FINAL MESSAGE WITH POEM -->
+<div id="page14" class="page">
+<h1>💖 Final Message</h1>
+
+<div class="poem">
+Mai aur meri tanhai aksar yeah baate karte hai
+
+Ki mai khoya sa ,tu mera rasta si
+Jab mai roya tha ,tu ek hasi si
+Mai soya tha ,tu khwab si
+
+Ki Mai koi bhool sa ,tu ek fool si
+Mere har gham ko ek marham si
+Mai gulab jamun sa tu pani puri si
+Meri adhuri kahani ko karne puri si
+Meri khamosi me ek shor si
+Mera dil churane aayi ek chor si 
+
+Ki mai hu akela tu saath thi
+Mai hu bawla sa tu hoshiyari si
+Mujh bhakt ke liye ek bhakti si
+Mai hu padhaku sa tu kitab si
+Meri saamaan zindagi me ek vardaan si
+
+Ki mai shaant sa tu sukoon shanti si
+Mai karta paap sa tu hai ek suniti si
+Mai kalm sa tu personal diary si
+Mere har shrap ke liye ek blessing si
+
+Mai insomniac sa tu sleeping beauty si
+Mai hu sawla sa tu hai gori si
+Mere har kadam par ek sanam si
+Mere andhere me chaand si
+Mai bin buddhi sa tu samruddhi si
+
+Mai aur meri tanhai aksar yeah baate karte hai 
+
+Ki kitna tanha rheta tha Mai ,tu meri zindagi me bahar banke aaya
+Mujhpe hi jokes sunake, tune mujhko hi hasaya
+
+Purple Theodore valentine blessing se bhi mujhko, tune hi milwaya
+Mere bure se samay Ko, tune 11:11 banaya
+
+Choti choti baato par Roya jab mai, tune mujhe lamha lamha samjhaya
+Kitni minnate karke Maine, tujhko yu kamaya
+
+Motki khe kar Maine, tujhko bhot chidaya
+Toh wordle khelte hue mera, tune bhi majak udaya
+
+Thick shake Peete Peete mujhko, tune mysore Tirupati na jaane kitna ghumaya
+Fashion sense dekh kar mera, tune zanwaro ka photo laya
+
+Jab bore hua mai,tab tune badi door se aaye hai dikhaya
+Phir mere lame jokes sunkar,tune bhot chillaya
+
+Mujhko geet Ramayan padwa pahad ke baare me batakar, tune Anand bhot dilaya
+Meri zindagi me aake, tune saare ghamo Ko bhulaya
+
+Meri harkate dekh kar bhi,tune dance yu karaya
+Phir maar maar ke mujhko, tune patience bhot azmaya
+
+Chand ko dekh kar mujhko, tera hi khayal bhaya
+Bhikhre se Dil Ko mere ,teri aakhon ne hi sul jhaya
+
+Maaf karna mujhko jo  ,tujhe itna sataya
+Maaf karna mujhko jo , tujhe kabhi rulaya
+Thank you bolke aakhir mujhko, kar deti tu kyu paraya
+
+Poem yeah likh kar Maine, tere sang promise nibhaya
+3 June Ko aakhir Maine, tera din manaya
+3 June Ko aakhir Maine, tera Dil lubhaya
+
+Mai aur meri tanhai aksar yeah baate karte
+</div>
+
 </div>
 
 <script>
