@@ -3,110 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For You ❤️</title>
+<title>Happy Birthday ❤️</title>
 
 <style>
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-  color: white;
   text-align: center;
+  overflow: hidden;
+  background: radial-gradient(circle, #1a0033, #000);
+  color: white;
 }
 
-.container {
-  padding: 40px 20px;
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
-h1 {
-  font-size: 2.5em;
-}
-
-.button {
-  display: block;
-  margin: 20px auto;
-  padding: 12px 20px;
-  background: #ffffff22;
-  border-radius: 10px;
-  width: 220px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.button:hover {
-  background: #ffffff44;
-}
-
-.section {
+.page {
   display: none;
-  margin-top: 30px;
-  font-size: 1.2em;
-  line-height: 1.6;
+  padding: 40px;
 }
 
 .active {
   display: block;
 }
 
-.footer {
-  margin-top: 50px;
-  font-size: 0.9em;
-  opacity: 0.7;
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(45deg, #ff4d6d, #ff99ac);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 30px;
+  text-shadow: 0 0 15px #ff99cc;
+}
+
+iframe {
+  width: 90%;
+  height: 220px;
+  border-radius: 15px;
+  margin-top: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<canvas id="bg"></canvas>
 
-<h1>💙 For You</h1>
-<p>If you’re here… maybe Krishna wanted you to see this</p>
-
-<div class="button" onclick="show('sad')">When you feel sad</div>
-<div class="button" onclick="show('alone')">When you feel alone</div>
-<div class="button" onclick="show('sleep')">When you can’t sleep</div>
-<div class="button" onclick="show('happy')">When you’re happy</div>
-
-<div id="sad" class="section">
-🌿 Even in your silence… you are heard.<br><br>
-Krishna never leaves his devotees… and neither do the people who truly care.<br><br>
-You’re stronger than you think ❤️
-</div>
-
-<div id="alone" class="section">
-✨ You are never alone.<br><br>
-Sometimes distance hides presence… but doesn’t remove it.<br><br>
-Close your eyes… you’ll feel it.
-</div>
-
-<div id="sleep" class="section">
-🌙 Let your mind rest now.<br><br>
-You’ve done enough for today.<br><br>
-Sleep peacefully… everything will be okay 💙
-</div>
-
-<div id="happy" class="section">
-🎶 Seeing you happy… is a blessing.<br><br>
-Keep smiling like this always.<br><br>
-It makes everything better 🌸
-</div>
-
-<div class="footer">
-Made with care ❤️
-</div>
-
-</div>
-
-<audio autoplay loop>
-  <source src="https://www2.cs.uic.edu/~i101/SoundFiles/StarWars60.wav" type="audio/mpeg">
+<!-- Auto Music -->
+<audio id="bgMusic" autoplay loop>
+  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_1b3c3b2e0b.mp3" type="audio/mp3">
 </audio>
 
+<!-- PAGE 1 -->
+<div id="page1" class="page active">
+  <h1>🎉 Happy Birthday ❤️</h1>
+  <p>I made something magical for you ✨</p>
+  <button onclick="start()">Start</button>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page2" class="page">
+  <h1>😂 Quick Question</h1>
+  <p>Am I annoying?</p>
+  <button onclick="nextPage(3)">Yes 😅</button>
+  <button onclick="nextPage(3)">No 😇</button>
+</div>
+
+<!-- PAGE 3 -->
+<div id="page3" class="page">
+  <h1>😏 Be Honest</h1>
+  <p>Your favorite person?</p>
+  <button onclick="nextPage(4)">Me 😎</button>
+  <button onclick="nextPage(4)">Still me 😂</button>
+</div>
+
+<!-- PAGE 4 -->
+<div id="page4" class="page">
+  <h1>💙 Krishna Vibes</h1>
+  <iframe src="https://www.youtube.com/embed/asUDUqgC2V8" allowfullscreen></iframe>
+  <br>
+  <button onclick="nextPage(5)">Next</button>
+</div>
+
+<!-- PAGE 5 -->
+<div id="page5" class="page">
+  <h1>🎶 Just for you</h1>
+  <iframe src="https://www.youtube.com/embed/8Ff7zq4XG0I" allowfullscreen></iframe>
+  <br>
+  <button onclick="nextPage(6)">Final</button>
+</div>
+
+<!-- PAGE 6 -->
+<div id="page6" class="page">
+  <h1>💖 Final Message</h1>
+  <p id="typeText"></p>
+</div>
+
 <script>
-function show(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+function start() {
+  document.getElementById("bgMusic").play().catch(() => {});
+  nextPage(2);
 }
+
+function nextPage(n) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById("page" + n).classList.add("active");
+
+  if(n === 6) typeWriter();
+}
+
+// Typewriter effect
+const message = "No matter what happens... You will always be special to me 💖 Keep smiling, keep dancing 💃 Happy Birthday ❤️";
+let i = 0;
+
+function typeWriter() {
+  if (i < message.length) {
+    document.getElementById("typeText").innerHTML += message.charAt(i);
+    i++;
+    setTimeout(typeWriter, 40);
+  }
+}
+
+// Background animation (particles)
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for(let i=0;i<80;i++){
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    r: Math.random()*2,
+    d: Math.random()*1
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "rgba(255, 153, 204, 0.6)";
+  ctx.beginPath();
+
+  for(let i=0;i<particles.length;i++){
+    let p = particles[i];
+    ctx.moveTo(p.x, p.y);
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
+  }
+
+  ctx.fill();
+  update();
+}
+
+function update(){
+  for(let i=0;i<particles.length;i++){
+    let p = particles[i];
+    p.y += p.d;
+    if(p.y > canvas.height){
+      p.y = 0;
+      p.x = Math.random()*canvas.width;
+    }
+  }
+}
+
+setInterval(draw, 33);
 </script>
 
 </body>
