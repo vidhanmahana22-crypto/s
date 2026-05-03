@@ -1,136 +1,233 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For Samu 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise ❤️</title>
 
 <style>
 body {
   margin: 0;
-  font-family: Arial;
+  font-family: 'Segoe UI', sans-serif;
   text-align: center;
-  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
-  color: #333;
+  overflow-x: hidden;
+  background: radial-gradient(circle, #1a0033, #000);
+  color: white;
 }
 
-.page { display:none; padding:20px; }
+canvas {
+  position: fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+.page { display:none; padding:30px; }
 .active { display:block; }
 
 button {
-  padding:10px 20px;
+  padding:12px 20px;
   margin:10px;
   border:none;
-  border-radius:10px;
-  background:#ff4d6d;
+  border-radius:25px;
+  background: linear-gradient(45deg,#ff4d6d,#ff99ac);
   color:white;
   font-size:16px;
   cursor:pointer;
 }
 
-.question {
-  margin:20px;
-  font-size:18px;
+h1 { text-shadow:0 0 15px #ff99cc; }
+
+iframe {
+  width:90%;
+  height:220px;
+  border-radius:15px;
+  margin-top:20px;
 }
 
 .poem {
   max-width:700px;
-  margin:auto;
-  text-align:center;
+  margin:40px auto;
+  padding:20px;
+  text-align:left;
+  line-height:1.7;
+  background: rgba(255,255,255,0.05);
+  border-radius:15px;
+  box-shadow:0 0 20px rgba(255,153,204,0.2);
   white-space:pre-line;
-  font-size:16px;
-  line-height:1.6;
 }
 </style>
-
 </head>
+
 <body>
 
-<!-- 🎵 AUDIO -->
+<canvas id="bg"></canvas>
+
+<!-- AUDIO -->
 <audio id="bgMusic" loop>
-  <source src="shahrukh-khan-deepika-padukone.mp3" type="audio/mpeg">
+  <source src="Apna-Bana-Le.mp3" type="audio/mpeg">
 </audio>
+
+<script>
+let score = 0;
+let total = 10;
+
+function start(){
+  let music = document.getElementById("bgMusic");
+  music.volume = 0.3;
+  music.play().catch(()=>{});
+  nextPage(2);
+}
+
+function nextPage(n){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page"+n).classList.add("active");
+
+  if(n===12) showResult();
+}
+
+function correct(){ score++; }
+
+function annoyingYes(){ alert("Wrong answer 😤 try again"); }
+
+function move(btn){
+  btn.style.position="absolute";
+  btn.style.left=Math.random()*80+"%";
+  btn.style.top=Math.random()*80+"%";
+}
+
+function showResult(){
+  let text="";
+
+  if(score >= 8){
+    text = "Elite performance 😎 clearly you know me too well";
+  }
+  else if(score >= 5){
+    text = "Good good 😏 acceptable effort";
+  }
+  else if(score >= 3){
+    text = "Hmm 🤨 something feels off";
+  }
+  else{
+    text = "Very suspicious behavior 😤 investigation needed";
+  }
+
+  document.getElementById("result").innerHTML =
+    "Score: " + score + "/" + total + "<br><br>" + text;
+}
+</script>
 
 <!-- PAGE 1 -->
 <div id="page1" class="page active">
-<h1>🎉 Happy Birthday 🎉</h1>
-<p>Ready for something special? 😏</p>
+<h1>🎉 Happy Birthday ❤️</h1>
+<p>Let's test you 😏</p>
 <button onclick="start()">Start</button>
 </div>
 
 <!-- QUESTIONS -->
 <div id="page2" class="page">
-
-<div class="question">
-Best movie we watched?
-<br>
-<button onclick="ans(1)">Anand</button>
-<button onclick="ans(0)">Brahmastra</button>
-<button onclick="ans(0)">Random guess</button>
+<h1>😂 Q1</h1>
+<p>Am I annoying?</p>
+<button onclick="annoyingYes()">Yes 😅</button>
+<button onclick="correct(); nextPage(3)">No 😇</button>
 </div>
 
-<div class="question">
-Who has better navigation sense?
-<br>
-<button onclick="ans(1)">You</button>
-<button onclick="ans(0)">Me</button>
+<div id="page3" class="page">
+<h1>😏 Q2</h1>
+<p>Your favorite person?</p>
+<button onclick="correct(); nextPage(4)">Me 😎</button>
+<button onclick="correct(); nextPage(4)">Still me 😂</button>
 </div>
 
-<div class="question">
-Who annoys more?
-<br>
-<button onclick="annoyCheck(1)">Me 😈</button>
-<button onclick="annoyCheck(0)">You 😤</button>
+<div id="page4" class="page">
+<h1>🤭 Q3</h1>
+<p>Will you miss me?</p>
+<button onclick="correct(); nextPage(5)">Yes 🥺</button>
+<button onclick="move(this)">No 😒</button>
 </div>
 
-<div class="question">
-Who laughs at lame jokes?
-<br>
-<button onclick="ans(1)">You 😂</button>
-<button onclick="ans(0)">No one</button>
+<div id="page5" class="page">
+<h1>🎬 Q4</h1>
+<p>Best movie we watched?</p>
+<button onclick="correct(); nextPage(6)">Aanand ❤️</button>
+<button onclick="nextPage(6)">Brahmastra 😂</button>
+<button onclick="nextPage(6)">Mahavatar Narasimha 🔥</button>
 </div>
 
-<div class="question">
-Who eats more?
-<br>
-<button onclick="ans(1)">You 🍔</button>
-<button onclick="ans(0)">Me</button>
+<div id="page6" class="page">
+<h1>💃 Q5</h1>
+<p>Dance or Sleep?</p>
+<button onclick="correct(); nextPage(7)">Dance 💃</button>
+<button onclick="nextPage(7)">Sleep 😴</button>
 </div>
 
-<button onclick="nextPage('page3')">Finish</button>
+<div id="page7" class="page">
+<h1>😏 Q6</h1>
+<p>Who understands you better?</p>
+<button onclick="correct(); nextPage(8)">Me 😎</button>
+<button onclick="move(this)">No one 😶</button>
+</div>
+
+<div id="page8" class="page">
+<h1>😌 Q7</h1>
+<p>Who makes your day better?</p>
+<button onclick="correct(); nextPage(9)">Me 😎</button>
+<button onclick="nextPage(9)">Food 🍕</button>
+</div>
+
+<div id="page9" class="page">
+<h1>🧭 Q8</h1>
+<p>Who has better sense of direction?</p>
+<button onclick="correct(); nextPage(10)">Me 😎</button>
+<button onclick="nextPage(10)">Google Maps 😂</button>
+</div>
+
+<div id="page10" class="page">
+<h1>😂 Q9</h1>
+<p>Who is more dramatic?</p>
+<button onclick="nextPage(11)">You 😆</button>
+<button onclick="correct(); nextPage(11)">Me 😌</button>
+</div>
+
+<div id="page11" class="page">
+<h1>😏 Q10</h1>
+<p>Who gives best suggestions?</p>
+<button onclick="correct(); nextPage(12)">Me 😎</button>
+<button onclick="nextPage(12)">Internet 😂</button>
 </div>
 
 <!-- REPORT -->
-<div id="page3" class="page">
-<h2>📊 Report Card</h2>
+<div id="page12" class="page">
+<h1>📊 Your Report Card</h1>
 <p id="result"></p>
-<button onclick="nextPage('page4')">Next</button>
+<br>
+<button onclick="nextPage(13)">Next</button>
 </div>
 
-<!-- KRISHNA PAGE -->
-<div id="page4" class="page">
-<h2>🦚 For when you feel low</h2>
-<p>
-Whenever you feel sad, just remember…  
-Krishna is always with you 🌸  
-And also… someone annoying is always there 😏
-</p>
-<button onclick="nextPage('page5')">Next</button>
+<!-- KRISHNA -->
+<div id="page13" class="page">
+<h1>💙 For when you feel low</h1>
+<p>Whenever you're sad... just pause and listen 🌸</p>
+<iframe src="https://www.youtube.com/embed/asUDUqgC2V8"></iframe>
+<br><br>
+<button onclick="nextPage(14)">Next</button>
 </div>
 
-<!-- FINAL MESSAGE -->
-<div id="page5" class="page">
-<h2>💌 Final Message</h2>
+<!-- MESSAGE -->
+<div id="page14" class="page">
+<h1>💖 A Small Message</h1>
 <p>
-You are honestly one of the most fun, chaotic and amazing people 😄  
-Thanks for all the memories, laughs, and madness.  
-Stay the same… maybe slightly less annoying 😏
+You are genuinely someone very special ✨<br><br>
+Keep smiling, keep dancing 💃<br>
+And never change the way you are 🌸
 </p>
-<button onclick="nextPage('page6')">Here’s something for you</button>
+<br>
+<button onclick="nextPage(15)">Here's something for you</button>
 </div>
 
 <!-- POEM -->
-<div id="page6" class="page">
-<h1>💖 Here's a poem for you</h1>
+<div id="page15" class="page">
+<h1>💌 Here's a poem for you</h1>
 
 <div class="poem">
 Mai aur meri tanhai aksar yeah baate karte hai
@@ -206,39 +303,40 @@ Mai aur meri tanhai aksar yeah baate karte
 </div>
 
 <script>
-let score = 0;
+// particles
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
 
-function start(){
-  document.getElementById('bgMusic').play();
-  nextPage('page2');
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<80;i++){
+particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2,d:Math.random()});
 }
 
-function ans(val){
-  score += val;
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(255,153,204,0.6)";
+ctx.beginPath();
+
+particles.forEach(p=>{
+ctx.moveTo(p.x,p.y);
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
+});
+
+ctx.fill();
+
+particles.forEach(p=>{
+p.y+=p.d;
+if(p.y>canvas.height){
+p.y=0;
+p.x=Math.random()*canvas.width;
+}
+});
 }
 
-function annoyCheck(val){
-  if(val === 1){
-    score += 1;
-  } else {
-    alert("Wrong answer 😤 Select 'Me' to proceed");
-  }
-}
-
-function nextPage(id){
-  let pages = document.querySelectorAll('.page');
-  pages.forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-
-  if(id === 'page3'){
-    let text="";
-    if(score>=4) text="Legend level 😎 You know everything";
-    else if(score>=2) text="Decent 😏 but can improve";
-    else text="Very disappointing 😤";
-
-    document.getElementById("result").innerText = text + " | Score: " + score + "/5";
-  }
-}
+setInterval(draw,33);
 </script>
 
 </body>
