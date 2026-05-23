@@ -11,59 +11,50 @@ body {
   font-family: 'Segoe UI', sans-serif;
   text-align: center;
   overflow-x: hidden;
-  background: radial-gradient(circle at top, #1a0033, #000);
+  background: radial-gradient(circle, #1a0033, #000);
   color: white;
 }
 
-/* pages */
-.page {
-  display: none;
-  padding: 30px;
-}
-.active {
-  display: block;
-}
-
-/* buttons */
-button {
-  padding: 12px 20px;
-  margin: 10px;
-  border: none;
-  border-radius: 25px;
-  background: linear-gradient(45deg,#ff4d6d,#ff99ac);
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* sparkle background */
 canvas {
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
+  top:0;
+  left:0;
+  z-index:-1;
 }
 
-/* moon */
-.moon {
-  width: 140px;
-  height: 140px;
-  margin: 20px auto;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff, #aaa);
-  box-shadow: 0 0 60px white;
+.page { display:none; padding:30px; }
+.active { display:block; }
+
+button {
+  padding:12px 20px;
+  margin:10px;
+  border:none;
+  border-radius:25px;
+  background: linear-gradient(45deg,#ff4d6d,#ff99ac);
+  color:white;
+  font-size:16px;
+  cursor:pointer;
 }
 
-/* poem (UNCHANGED SLOT ONLY) */
+h1 { text-shadow:0 0 15px #ff99cc; }
+
+iframe {
+  width:90%;
+  height:220px;
+  border-radius:15px;
+  margin-top:20px;
+}
+
 .poem {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 20px;
-  text-align: left;
-  line-height: 1.7;
+  max-width:700px;
+  margin:40px auto;
+  padding:20px;
+  text-align:left;
+  line-height:1.7;
   background: rgba(255,255,255,0.05);
-  border-radius: 15px;
-  white-space: pre-line;
+  border-radius:15px;
+  box-shadow:0 0 20px rgba(255,153,204,0.2);
+  white-space:pre-line;
 }
 </style>
 </head>
@@ -71,132 +62,282 @@ canvas {
 <body>
 
 <canvas id="bg"></canvas>
-<canvas id="confetti"></canvas>
 
+<!-- AUDIO -->
 <audio id="bgMusic" loop>
-  <source src="Apna-Bana-Le.mp3">
+  <source src="Apna-Bana-Le.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 let score = 0;
-const birthday = "2002-06-03";
+let total = 10;
 
-/* NAVIGATION (SAFE) */
-function nextPage(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page'+n).classList.add('active');
-
-  if(n===13) loadMoon();
-  if(n===14) startConfetti();
+function start(){
+  let music = document.getElementById("bgMusic");
+  music.volume = 0.3;
+  music.play().catch(()=>{});
+  nextPage(2);
 }
 
-/* quiz scoring (kept safe) */
+function nextPage(n){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page"+n).classList.add("active");
+
+  if(n===12) showResult();
+}
+
 function correct(){ score++; }
 
-/* MOON API (ONLY EXTRA FEATURE) */
-function loadMoon(){
-  let date=new Date(birthday);
-  let unix=Math.floor(date.getTime()/1000);
+function annoyingYes(){ alert("Wrong answer 😤 try again"); }
 
-  fetch("https://api.farmsense.net/v1/moonphases/?d="+unix)
-  .then(r=>r.json())
-  .then(d=>{
-    document.getElementById("moonText").innerHTML =
-      "🌙 Moon Phase on 3 June 2002: " + d[0].Phase;
-  });
+function move(btn){
+  btn.style.position="absolute";
+  btn.style.left=Math.random()*80+"%";
+  btn.style.top=Math.random()*80+"%";
 }
 
-/* CONFETTI (ONLY FINAL PAGE) */
-function startConfetti(){
-  let c=document.getElementById("confetti");
-  let ctx=c.getContext("2d");
+function showResult(){
+  let text="";
 
-  c.width=innerWidth;
-  c.height=innerHeight;
-
-  let p=[];
-  for(let i=0;i<120;i++){
-    p.push({
-      x:Math.random()*c.width,
-      y:Math.random()*c.height,
-      r:Math.random()*5
-    });
+  if(score >= 8){
+    text = "Elite performance 😎 clearly you know me too well";
+  }
+  else if(score >= 5){
+    text = "Good good 😏 acceptable effort";
+  }
+  else if(score >= 3){
+    text = "Hmm 🤨 something feels off";
+  }
+  else{
+    text = "Very suspicious behavior 😤 investigation needed";
   }
 
-  function draw(){
-    ctx.clearRect(0,0,c.width,c.height);
-    ctx.fillStyle="white";
-
-    p.forEach(o=>{
-      ctx.beginPath();
-      ctx.arc(o.x,o.y,o.r,0,Math.PI*2);
-      ctx.fill();
-      o.y+=2;
-      if(o.y>c.height)o.y=0;
-    });
-
-    requestAnimationFrame(draw);
-  }
-  draw();
+  document.getElementById("result").innerHTML =
+    "Score: " + score + "/" + total + "<br><br>" + text;
 }
 </script>
 
 <!-- PAGE 1 -->
 <div id="page1" class="page active">
 <h1>🎉 Happy Birthday Samu ❤️</h1>
-<button onclick="document.getElementById('bgMusic').play(); nextPage(2);">
-Start
-</button>
+<p>Let's test you 😏</p>
+<button onclick="start()">Start</button>
 </div>
 
-<!-- QUIZ (UNCHANGED STRUCTURE — KEEP YOUR ORIGINAL CONTENT HERE) -->
-<div id="page2" class="page"><h2>Q1</h2><p>Am I annoying?</p><button onclick="nextPage(3)">Yes 😂</button><button onclick="correct(); nextPage(3)">No 😇</button></div>
-<div id="page3" class="page"><h2>Q2</h2><p>Your favorite person?</p><button onclick="correct(); nextPage(4)">Me 😎</button><button onclick="correct(); nextPage(4)">Still me 😂</button></div>
-<div id="page4" class="page"><h2>Q3</h2><p>Will you miss me?</p><button onclick="correct(); nextPage(5)">Yes 🥺</button><button onclick="nextPage(5)">No 😒</button></div>
-<div id="page5" class="page"><h2>Q4</h2><p>Best movie?</p><button onclick="correct(); nextPage(6)">Aanand ❤️</button><button onclick="nextPage(6)">Brahmastra 😂</button></div>
-<div id="page6" class="page"><h2>Q5</h2><p>Dance or Sleep?</p><button onclick="correct(); nextPage(7)">Dance 💃</button><button onclick="nextPage(7)">Sleep 😴</button></div>
-<div id="page7" class="page"><h2>Q6</h2><p>Who understands you?</p><button onclick="correct(); nextPage(8)">Me 😎</button><button onclick="nextPage(8)">No one 😶</button></div>
-<div id="page8" class="page"><h2>Q7</h2><p>Who makes your day?</p><button onclick="correct(); nextPage(9)">Me 😎</button><button onclick="nextPage(9)">Food 🍕</button></div>
-<div id="page9" class="page"><h2>Q8</h2><p>Direction sense?</p><button onclick="correct(); nextPage(10)">Me 😎</button><button onclick="nextPage(10)">Google 😂</button></div>
-<div id="page10" class="page"><h2>Q9</h2><p>More dramatic?</p><button onclick="nextPage(11)">You 😆</button><button onclick="correct(); nextPage(11)">Me 😌</button></div>
-<div id="page11" class="page"><h2>Q10</h2><p>Best suggestions?</p><button onclick="correct(); nextPage(12)">Me 😎</button><button onclick="nextPage(12)">Internet 😂</button></div>
+<!-- QUESTIONS -->
+<div id="page2" class="page">
+<h1>😂 Q1</h1>
+<p>Am I annoying?</p>
+<button onclick="annoyingYes()">Yes 😅</button>
+<button onclick="correct(); nextPage(3)">No 😇</button>
+</div>
 
-<!-- MESSAGE (ONLY SLOT — YOUR CONTENT MUST STAY HERE) -->
+<div id="page3" class="page">
+<h1>😏 Q2</h1>
+<p>Your favorite person?</p>
+<button onclick="correct(); nextPage(4)">Me 😎</button>
+<button onclick="correct(); nextPage(4)">Still me 😂</button>
+</div>
+
+<div id="page4" class="page">
+<h1>🤭 Q3</h1>
+<p>Will you miss me?</p>
+<button onclick="correct(); nextPage(5)">Yes 🥺</button>
+<button onclick="move(this)">No 😒</button>
+</div>
+
+<div id="page5" class="page">
+<h1>🎬 Q4</h1>
+<p>Best movie we watched?</p>
+<button onclick="correct(); nextPage(6)">Aanand ❤️</button>
+<button onclick="nextPage(6)">Brahmastra 😂</button>
+<button onclick="nextPage(6)">Mahavatar Narasimha 🔥</button>
+</div>
+
+<div id="page6" class="page">
+<h1>💃 Q5</h1>
+<p>Dance or Sleep?</p>
+<button onclick="correct(); nextPage(7)">Dance 💃</button>
+<button onclick="nextPage(7)">Sleep 😴</button>
+</div>
+
+<div id="page7" class="page">
+<h1>😏 Q6</h1>
+<p>Who understands you better?</p>
+<button onclick="correct(); nextPage(8)">Me 😎</button>
+<button onclick="move(this)">No one 😶</button>
+</div>
+
+<div id="page8" class="page">
+<h1>😌 Q7</h1>
+<p>Who makes your day better?</p>
+<button onclick="correct(); nextPage(9)">Me 😎</button>
+<button onclick="nextPage(9)">Food 🍕</button>
+</div>
+
+<div id="page9" class="page">
+<h1>🧭 Q8</h1>
+<p>Who has better sense of direction?</p>
+<button onclick="correct(); nextPage(10)">Me 😎</button>
+<button onclick="nextPage(10)">Google Maps 😂</button>
+</div>
+
+<div id="page10" class="page">
+<h1>😂 Q9</h1>
+<p>Who is more dramatic?</p>
+<button onclick="nextPage(11)">You 😆</button>
+<button onclick="correct(); nextPage(11)">Me 😌</button>
+</div>
+
+<div id="page11" class="page">
+<h1>😏 Q10</h1>
+<p>Who gives best suggestions?</p>
+<button onclick="correct(); nextPage(12)">Me 😎</button>
+<button onclick="nextPage(12)">Internet 😂</button>
+</div>
+
+<!-- REPORT -->
 <div id="page12" class="page">
-<h1>💌 Message</h1>
-
-<p>
-( PASTE YOUR ORIGINAL MESSAGE HERE — DO NOT CHANGE ANYTHING )
-</p>
-
+<h1>📊 Your Report Card</h1>
+<p id="result"></p>
+<br>
 <button onclick="nextPage(13)">Next</button>
 </div>
 
-<!-- MOON (ONLY EXTRA PAGE ADDED) -->
+<!-- KRISHNA -->
 <div id="page13" class="page">
-<h1>🌙 Moon on your birthday</h1>
-<div class="moon"></div>
-<p id="moonText"></p>
-
+<h1>💙 For when you feel low</h1>
+<p>Whenever you're sad... just pause and listen 🌸</p>
+<iframe src="https://www.youtube.com/embed/asUDUqgC2V8"></iframe>
+<br><br>
 <button onclick="nextPage(14)">Next</button>
 </div>
 
-<!-- POEM (ONLY SLOT — NO CHANGE) -->
+<!-- MESSAGE -->
 <div id="page14" class="page">
-<h1>💌 Poem</h1>
+<h1>💖 A Small Message</h1>
+<p>
+You are genuinely someone very special ✨<br><br>
+Keep smiling, keep dancing 💃<br>
+And never change the way you are 🌸
+</p>
+<br>
+<button onclick="nextPage(15)">Here's something for you</button>
+</div>
+
+<!-- POEM -->
+<div id="page15" class="page">
+<h1>💌 Here's a poem for you</h1>
 
 <div class="poem">
-( PASTE YOUR FULL POEM HERE — DO NOT CHANGE ANYTHING )
+Mai aur meri tanhai aksar yeah baate karte hai
+
+Ki mai khoya sa ,tu mera rasta si
+Jab mai roya tha ,tu ek hasi si
+Mai soya tha ,tu khwab si
+
+Ki Mai koi bhool sa ,tu ek fool si
+Mere har gham ko ek marham si
+Mai gulab jamun sa tu pani puri si
+Meri adhuri kahani ko karne puri si
+Meri khamosi me ek shor si
+Mera dil churane aayi ek chor si 
+
+Ki mai hu akela tu saath thi
+Mai hu bawla sa tu hoshiyari si
+Mujh bhakt ke liye ek bhakti si
+Mai hu padhaku sa tu kitab si
+Meri saamaan zindagi me ek vardaan si
+
+Ki mai shaant sa tu sukoon shanti si
+Mai karta paap sa tu hai ek suniti si
+Mai kalm sa tu personal diary si
+Mere har shrap ke liye ek blessing si
+
+Mai insomniac sa tu sleeping beauty si
+Mai hu sawla sa tu hai gori si
+Mere har kadam par ek sanam si
+Mere andhere me chaand si
+Mai bin buddhi sa tu samruddhi si
+
+Mai aur meri tanhai aksar yeah baate karte hai 
+
+Ki kitna tanha rheta tha Mai ,tu meri zindagi me bahar banke aaya
+Mujhpe hi jokes sunake, tune mujhko hi hasaya
+
+Purple Theodore valentine blessing se bhi mujhko, tune hi milwaya
+Mere bure se samay Ko, tune 11:11 banaya
+
+Choti choti baato par Roya jab mai, tune mujhe lamha lamha samjhaya
+Kitni minnate karke Maine, tujhko yu kamaya
+
+Motki khe kar Maine, tujhko bhot chidaya
+Toh wordle khelte hue mera, tune bhi majak udaya
+
+Thick shake Peete Peete mujhko, tune mysore Tirupati na jaane kitna ghumaya
+Fashion sense dekh kar mera, tune zanwaro ka photo laya
+
+Jab bore hua mai,tab tune badi door se aaye hai dikhaya
+Phir mere lame jokes sunkar,tune bhot chillaya
+
+Mujhko geet Ramayan padwa pahad ke baare me batakar, tune Anand bhot dilaya
+Meri zindagi me aake, tune saare ghamo Ko bhulaya
+
+Meri harkate dekh kar bhi,tune dance yu karaya
+Phir maar maar ke mujhko, tune patience bhot azmaya
+
+Chand ko dekh kar mujhko, tera hi khayal bhaya
+Bhikhre se Dil Ko mere ,teri aakhon ne hi sul jhaya
+
+Maaf karna mujhko jo  ,tujhe itna sataya
+Maaf karna mujhko jo , tujhe kabhi rulaya
+Thank you bolke aakhir mujhko, kar deti tu kyu paraya
+
+Poem yeah likh kar Maine, tere sang promise nibhaya
+3 June Ko aakhir Maine, tera din manaya
+3 June Ko aakhir Maine, tera Dil lubhaya
+
+Mai aur meri tanhai aksar yeah baate karte
 </div>
 
-<button onclick="nextPage(15)">Final 🎉</button>
 </div>
 
-<!-- FINAL -->
-<div id="page15" class="page">
-<h1>🎆 Happy Birthday 🎆</h1>
-<p>You are special ❤️</p>
-</div>
+<script>
+// particles
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<80;i++){
+particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2,d:Math.random()});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(255,153,204,0.6)";
+ctx.beginPath();
+
+particles.forEach(p=>{
+ctx.moveTo(p.x,p.y);
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
+});
+
+ctx.fill();
+
+particles.forEach(p=>{
+p.y+=p.d;
+if(p.y>canvas.height){
+p.y=0;
+p.x=Math.random()*canvas.width;
+}
+});
+}
+
+setInterval(draw,33);
+</script>
 
 </body>
 </html>
