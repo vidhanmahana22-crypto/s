@@ -90,7 +90,6 @@ function nextPage(n){
   document.getElementById("page"+n).classList.add("active");
 
   if(n===12) showResult();
-  if(n===13) loadMoonImage(); // ONLY MOON TRIGGER
 }
 
 function correct(){ score++; }
@@ -122,32 +121,6 @@ function showResult(){
   document.getElementById("result").innerHTML =
     "Score: " + score + "/" + total + "<br><br>" + text;
 }
-
-/* 🌙 FINAL MOON FUNCTION (ONLY REQUIRED CHANGE) */
-function loadMoonImage(){
-
-  const date = "2002-06-03";
-  const apiKey = "DEMO_KEY";
-
-  // 🌙 BEFORE 3 JUNE 2002 (NASA API)
-  fetch(`https://api.nasa.gov/planetary/apod?date=${date}&api_key=${apiKey}`)
-  .then(res => res.json())
-  .then(data => {
-
-    if(data.media_type === "image"){
-      document.getElementById("moonBeforeImg").src = data.url;
-    } else {
-      document.getElementById("moonBeforeImg").src = data.thumbnail_url || "";
-    }
-
-  })
-  .catch(() => {
-    document.getElementById("moonBeforeImg").alt = "NASA data not available";
-  });
-
-  // 🌕 AFTER 3 JUNE 2002 (LOCAL IMAGE)
-  document.getElementById("moonAfterImg").src = "image.jpeg";
-}
 </script>
 
 <!-- PAGE 1 -->
@@ -157,7 +130,7 @@ function loadMoonImage(){
 <button onclick="start()">Start</button>
 </div>
 
-<!-- QUIZ (UNCHANGED EXACTLY) -->
+<!-- QUIZ -->
 <div id="page2" class="page">
 <h1>😂 Q1</h1>
 <p>Am I annoying?</p>
@@ -229,7 +202,7 @@ function loadMoonImage(){
 <button onclick="nextPage(12)">Internet 😂</button>
 </div>
 
-<!-- REPORT -->
+<!-- RESULT -->
 <div id="page12" class="page">
 <h1>📊 Your Report Card</h1>
 <p id="result"></p>
@@ -237,15 +210,15 @@ function loadMoonImage(){
 <button onclick="nextPage(13)">Next</button>
 </div>
 
-<!-- 🌙 MOON PAGE (FINAL EXACT REQUIREMENT) -->
+<!-- 🌙 MOON PAGE (UPDATED ONLY HERE) -->
 <div id="page13" class="page">
 <h1>🌙 Moon Comparison</h1>
 
 <h3>Moon before 3 June 2002</h3>
-<img id="moonBeforeImg" class="moon-img">
+<img src="realImage.jpeg" class="moon-img">
 
 <h3>Moon after 3 June 2002</h3>
-<img id="moonAfterImg" class="moon-img">
+<img src="realImage.jpeg" class="moon-img">
 
 <br>
 <button onclick="nextPage(14)">Next</button>
