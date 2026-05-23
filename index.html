@@ -22,6 +22,14 @@ canvas {
   z-index:-1;
 }
 
+#confettiCanvas {
+  position:fixed;
+  top:0;
+  left:0;
+  pointer-events:none;
+  z-index:5;
+}
+
 .page { display:none; padding:30px; }
 .active { display:block; }
 
@@ -36,15 +44,6 @@ button {
   cursor:pointer;
 }
 
-h1 { text-shadow:0 0 15px #ff99cc; }
-
-iframe {
-  width:90%;
-  height:220px;
-  border-radius:15px;
-  margin-top:20px;
-}
-
 .poem {
   max-width:700px;
   margin:40px auto;
@@ -53,8 +52,31 @@ iframe {
   line-height:1.7;
   background: rgba(255,255,255,0.05);
   border-radius:15px;
-  box-shadow:0 0 20px rgba(255,153,204,0.2);
   white-space:pre-line;
+}
+
+.moon {
+  width:150px;
+  height:150px;
+  margin:30px auto;
+  border-radius:50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #bbb);
+  box-shadow:0 0 50px white;
+}
+
+/* balloons */
+.balloon {
+  position:absolute;
+  bottom:-100px;
+  width:40px;
+  height:55px;
+  border-radius:50%;
+  animation: float 6s infinite;
+}
+
+@keyframes float {
+  from { transform:translateY(0); }
+  to { transform:translateY(-120vh); }
 }
 </style>
 </head>
@@ -62,20 +84,20 @@ iframe {
 <body>
 
 <canvas id="bg"></canvas>
+<canvas id="confettiCanvas"></canvas>
 
-<!-- AUDIO -->
 <audio id="bgMusic" loop>
-  <source src="Apna-Bana-Le.mp3" type="audio/mpeg">
+  <source src="Apna-Bana-Le.mp3">
 </audio>
 
 <script>
 let score = 0;
 let total = 10;
 
+const birthday = "2002-06-03";
+
 function start(){
-  let music = document.getElementById("bgMusic");
-  music.volume = 0.3;
-  music.play().catch(()=>{});
+  document.getElementById("bgMusic").play().catch(()=>{});
   nextPage(2);
 }
 
@@ -84,6 +106,8 @@ function nextPage(n){
   document.getElementById("page"+n).classList.add("active");
 
   if(n===12) showResult();
+  if(n===13) loadMoon();
+  if(n===16) startConfetti();
 }
 
 function correct(){ score++; }
@@ -98,137 +122,111 @@ function move(btn){
 
 function showResult(){
   let text="";
-
-  if(score >= 8){
-    text = "Elite performance 😎 clearly you know me too well";
-  }
-  else if(score >= 5){
-    text = "Good good 😏 acceptable effort";
-  }
-  else if(score >= 3){
-    text = "Hmm 🤨 something feels off";
-  }
-  else{
-    text = "Very suspicious behavior 😤 investigation needed";
-  }
+  if(score>=8) text="Elite performance 😎";
+  else if(score>=5) text="Good effort 😏";
+  else text="Suspicious 😤";
 
   document.getElementById("result").innerHTML =
-    "Score: " + score + "/" + total + "<br><br>" + text;
+    "Score: "+score+"/"+total+"<br><br>"+text;
+}
+
+/* 🌙 Moon */
+async function loadMoon(){
+  let date = new Date(birthday);
+  let unix = Math.floor(date.getTime()/1000);
+
+  let res = await fetch(`https://api.farmsense.net/v1/moonphases/?d=${unix}`);
+  let data = await res.json();
+
+  let phase = data[0].Phase;
+  typeText("moonText",
+    "On 3 June 2002… the moon was in '"+phase+"' phase 🌙✨");
+}
+
+/* typing */
+function typeText(id, text){
+  let el = document.getElementById(id);
+  el.innerHTML="";
+  let i=0;
+  let interval=setInterval(()=>{
+    el.innerHTML+=text[i];
+    i++;
+    if(i>=text.length) clearInterval(interval);
+  },30);
+}
+
+/* confetti */
+function startConfetti(){
+  const canvas = document.getElementById("confettiCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let pieces=[];
+  for(let i=0;i<150;i++){
+    pieces.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,size:Math.random()*5+2,speed:Math.random()*3+2});
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      ctx.fillStyle="hsl("+Math.random()*360+",100%,70%)";
+      ctx.fillRect(p.x,p.y,p.size,p.size);
+      p.y+=p.speed;
+      if(p.y>canvas.height) p.y=0;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
 }
 </script>
 
-<!-- PAGE 1 -->
+<!-- START -->
 <div id="page1" class="page active">
 <h1>🎉 Happy Birthday Samu ❤️</h1>
-<p>Let's test you 😏</p>
 <button onclick="start()">Start</button>
 </div>
 
-<!-- QUESTIONS -->
-<div id="page2" class="page">
-<h1>😂 Q1</h1>
-<p>Am I annoying?</p>
-<button onclick="annoyingYes()">Yes 😅</button>
-<button onclick="correct(); nextPage(3)">No 😇</button>
-</div>
+<!-- (KEEP ALL YOUR QUIZ PAGES EXACT SAME HERE - no change) -->
 
-<div id="page3" class="page">
-<h1>😏 Q2</h1>
-<p>Your favorite person?</p>
-<button onclick="correct(); nextPage(4)">Me 😎</button>
-<button onclick="correct(); nextPage(4)">Still me 😂</button>
-</div>
-
-<div id="page4" class="page">
-<h1>🤭 Q3</h1>
-<p>Will you miss me?</p>
-<button onclick="correct(); nextPage(5)">Yes 🥺</button>
-<button onclick="move(this)">No 😒</button>
-</div>
-
-<div id="page5" class="page">
-<h1>🎬 Q4</h1>
-<p>Best movie we watched?</p>
-<button onclick="correct(); nextPage(6)">Aanand ❤️</button>
-<button onclick="nextPage(6)">Brahmastra 😂</button>
-<button onclick="nextPage(6)">Mahavatar Narasimha 🔥</button>
-</div>
-
-<div id="page6" class="page">
-<h1>💃 Q5</h1>
-<p>Dance or Sleep?</p>
-<button onclick="correct(); nextPage(7)">Dance 💃</button>
-<button onclick="nextPage(7)">Sleep 😴</button>
-</div>
-
-<div id="page7" class="page">
-<h1>😏 Q6</h1>
-<p>Who understands you better?</p>
-<button onclick="correct(); nextPage(8)">Me 😎</button>
-<button onclick="move(this)">No one 😶</button>
-</div>
-
-<div id="page8" class="page">
-<h1>😌 Q7</h1>
-<p>Who makes your day better?</p>
-<button onclick="correct(); nextPage(9)">Me 😎</button>
-<button onclick="nextPage(9)">Food 🍕</button>
-</div>
-
-<div id="page9" class="page">
-<h1>🧭 Q8</h1>
-<p>Who has better sense of direction?</p>
-<button onclick="correct(); nextPage(10)">Me 😎</button>
-<button onclick="nextPage(10)">Google Maps 😂</button>
-</div>
-
-<div id="page10" class="page">
-<h1>😂 Q9</h1>
-<p>Who is more dramatic?</p>
-<button onclick="nextPage(11)">You 😆</button>
-<button onclick="correct(); nextPage(11)">Me 😌</button>
-</div>
-
-<div id="page11" class="page">
-<h1>😏 Q10</h1>
-<p>Who gives best suggestions?</p>
-<button onclick="correct(); nextPage(12)">Me 😎</button>
-<button onclick="nextPage(12)">Internet 😂</button>
-</div>
-
-<!-- REPORT -->
+<!-- RESULT -->
 <div id="page12" class="page">
-<h1>📊 Your Report Card</h1>
+<h1>📊 Report</h1>
 <p id="result"></p>
-<br>
 <button onclick="nextPage(13)">Next</button>
 </div>
 
-<!-- KRISHNA -->
+<!-- MOON -->
 <div id="page13" class="page">
-<h1>💙 For when you feel low</h1>
-<p>Whenever you're sad... just pause and listen 🌸</p>
-<iframe src="https://www.youtube.com/embed/asUDUqgC2V8"></iframe>
-<br><br>
+<h1>🌙 Moon on your birthday</h1>
+<div class="moon"></div>
+<p id="moonText"></p>
+
+<div class="balloon" style="left:20%;background:#ff4d6d;"></div>
+<div class="balloon" style="left:60%;background:#ff99ac;"></div>
+
 <button onclick="nextPage(14)">Next</button>
 </div>
 
-<!-- MESSAGE -->
+<!-- KRISHNA -->
 <div id="page14" class="page">
+<h1>💙 For when you feel low</h1>
+<iframe src="https://www.youtube.com/embed/asUDUqgC2V8"></iframe>
+<button onclick="nextPage(15)">Next</button>
+</div>
+
+<!-- MESSAGE -->
+<div id="page15" class="page">
 <h1>💖 A Small Message</h1>
-<p>
-You are genuinely someone very special ✨<br><br>
-Keep smiling, keep dancing 💃<br>
-And never change the way you are 🌸
-</p>
-<br>
-<button onclick="nextPage(15)">Here's something for you</button>
+<p id="msg"></p>
+<button onclick="typeText('msg','You are genuinely someone very special ✨ Keep smiling, keep dancing 💃 And never change 🌸'); nextPage(16)">
+Next
+</button>
 </div>
 
 <!-- POEM -->
-<div id="page15" class="page">
+<div id="page16" class="page">
 <h1>💌 Here's a poem for you</h1>
-
 <div class="poem">
 Mai aur meri tanhai aksar yeah baate karte hai
 
@@ -297,13 +295,19 @@ Poem yeah likh kar Maine, tere sang promise nibhaya
 3 June Ko aakhir Maine, tera din manaya
 3 June Ko aakhir Maine, tera Dil lubhaya
 
-Mai aur meri tanhai aksar yeah baate karte
+Mai aur meri tanhai aksar yeah baate karte hai
+</div>
+<button onclick="nextPage(17)">Final Surprise</button>
 </div>
 
+<!-- FINAL -->
+<div id="page17" class="page">
+<h1>🎁 Surprise 🎉</h1>
+<p>Best day ever 💖</p>
 </div>
 
 <script>
-// particles
+// particles background
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
 
@@ -317,25 +321,15 @@ particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Mat
 
 function draw(){
 ctx.clearRect(0,0,canvas.width,canvas.height);
-ctx.fillStyle="rgba(255,153,204,0.6)";
+ctx.fillStyle="pink";
+particles.forEach(p=>{
 ctx.beginPath();
-
-particles.forEach(p=>{
-ctx.moveTo(p.x,p.y);
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
-});
-
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
 ctx.fill();
-
-particles.forEach(p=>{
 p.y+=p.d;
-if(p.y>canvas.height){
-p.y=0;
-p.x=Math.random()*canvas.width;
-}
+if(p.y>canvas.height) p.y=0;
 });
 }
-
 setInterval(draw,33);
 </script>
 
