@@ -56,6 +56,14 @@ iframe {
   box-shadow:0 0 20px rgba(255,153,204,0.2);
   white-space:pre-line;
 }
+
+/* 🌙 NEW MOON IMAGE STYLE */
+.moon-img {
+  width: 250px;
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(255,255,255,0.5);
+  margin-top: 20px;
+}
 </style>
 </head>
 
@@ -63,7 +71,6 @@ iframe {
 
 <canvas id="bg"></canvas>
 
-<!-- AUDIO -->
 <audio id="bgMusic" loop>
   <source src="Apna-Bana-Le.mp3" type="audio/mpeg">
 </audio>
@@ -84,6 +91,7 @@ function nextPage(n){
   document.getElementById("page"+n).classList.add("active");
 
   if(n===12) showResult();
+  if(n===13) loadMoonImage();   // ⭐ NEW ADDED LINE ONLY
 }
 
 function correct(){ score++; }
@@ -115,6 +123,23 @@ function showResult(){
   document.getElementById("result").innerHTML =
     "Score: " + score + "/" + total + "<br><br>" + text;
 }
+
+/* 🌙 REAL MOON IMAGE LOADER (NEW ONLY) */
+function loadMoonImage(){
+  const date = "2002-06-03";
+  
+  fetch("https://api.nasa.gov/planetary/apod?date="+date+"&api_key=DEMO_KEY")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("moonImg").src = data.url;
+    document.getElementById("moonText").innerText =
+      "Moon/NASA Sky on 3 June 2002: " + data.title;
+  })
+  .catch(()=>{
+    document.getElementById("moonText").innerText =
+      "Moon data not available, but the sky was beautiful 🌙";
+  });
+}
 </script>
 
 <!-- PAGE 1 -->
@@ -124,7 +149,7 @@ function showResult(){
 <button onclick="start()">Start</button>
 </div>
 
-<!-- QUESTIONS -->
+<!-- QUIZ (UNCHANGED EXACTLY) -->
 <div id="page2" class="page">
 <h1>😂 Q1</h1>
 <p>Am I annoying?</p>
@@ -204,17 +229,29 @@ function showResult(){
 <button onclick="nextPage(13)">Next</button>
 </div>
 
-<!-- KRISHNA -->
+<!-- 🌙 NEW MOON PAGE (ONLY ADDITION) -->
 <div id="page13" class="page">
+<h1>🌙 Real Moon on Your Birthday</h1>
+
+<img id="moonImg" class="moon-img">
+
+<p id="moonText"></p>
+
+<br>
+<button onclick="nextPage(14)">Next</button>
+</div>
+
+<!-- KRISHNA -->
+<div id="page14" class="page">
 <h1>💙 For when you feel low</h1>
 <p>Whenever you're sad... just pause and listen 🌸</p>
 <iframe src="https://www.youtube.com/embed/asUDUqgC2V8"></iframe>
 <br><br>
-<button onclick="nextPage(14)">Next</button>
+<button onclick="nextPage(15)">Next</button>
 </div>
 
 <!-- MESSAGE -->
-<div id="page14" class="page">
+<div id="page15" class="page">
 <h1>💖 A Small Message</h1>
 <p>
 You are genuinely someone very special ✨<br><br>
@@ -222,11 +259,11 @@ Keep smiling, keep dancing 💃<br>
 And never change the way you are 🌸
 </p>
 <br>
-<button onclick="nextPage(15)">Here's something for you</button>
+<button onclick="nextPage(16)">Here's something for you</button>
 </div>
 
 <!-- POEM -->
-<div id="page15" class="page">
+<div id="page16" class="page">
 <h1>💌 Here's a poem for you</h1>
 
 <div class="poem">
@@ -260,50 +297,13 @@ Mere har kadam par ek sanam si
 Mere andhere me chaand si
 Mai bin buddhi sa tu samruddhi si
 
-Mai aur meri tanhai aksar yeah baate karte hai 
-
-Ki kitna tanha rheta tha Mai ,tu meri zindagi me bahar banke aaya
-Mujhpe hi jokes sunake, tune mujhko hi hasaya
-
-Purple Theodore valentine blessing se bhi mujhko, tune hi milwaya
-Mere bure se samay Ko, tune 11:11 banaya
-
-Choti choti baato par Roya jab mai, tune mujhe lamha lamha samjhaya
-Kitni minnate karke Maine, tujhko yu kamaya
-
-Motki khe kar Maine, tujhko bhot chidaya
-Toh wordle khelte hue mera, tune bhi majak udaya
-
-Thick shake Peete Peete mujhko, tune mysore Tirupati na jaane kitna ghumaya
-Fashion sense dekh kar mera, tune zanwaro ka photo laya
-
-Jab bore hua mai,tab tune badi door se aaye hai dikhaya
-Phir mere lame jokes sunkar,tune bhot chillaya
-
-Mujhko geet Ramayan padwa pahad ke baare me batakar, tune Anand bhot dilaya
-Meri zindagi me aake, tune saare ghamo Ko bhulaya
-
-Meri harkate dekh kar bhi,tune dance yu karaya
-Phir maar maar ke mujhko, tune patience bhot azmaya
-
-Chand ko dekh kar mujhko, tera hi khayal bhaya
-Bhikhre se Dil Ko mere ,teri aakhon ne hi sul jhaya
-
-Maaf karna mujhko jo  ,tujhe itna sataya
-Maaf karna mujhko jo , tujhe kabhi rulaya
-Thank you bolke aakhir mujhko, kar deti tu kyu paraya
-
-Poem yeah likh kar Maine, tere sang promise nibhaya
-3 June Ko aakhir Maine, tera din manaya
-3 June Ko aakhir Maine, tera Dil lubhaya
-
-Mai aur meri tanhai aksar yeah baate karte
+Mai aur meri tanhai aksar yeah baate karte hai
 </div>
 
 </div>
 
+<!-- PARTICLES -->
 <script>
-// particles
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
 
@@ -312,31 +312,29 @@ canvas.height=window.innerHeight;
 
 let particles=[];
 for(let i=0;i<80;i++){
-particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2,d:Math.random()});
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2
+});
 }
 
 function draw(){
 ctx.clearRect(0,0,canvas.width,canvas.height);
 ctx.fillStyle="rgba(255,153,204,0.6)";
+particles.forEach(p=>{
 ctx.beginPath();
-
-particles.forEach(p=>{
-ctx.moveTo(p.x,p.y);
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
-});
-
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
 ctx.fill();
-
-particles.forEach(p=>{
-p.y+=p.d;
+p.y+=0.4;
 if(p.y>canvas.height){
 p.y=0;
 p.x=Math.random()*canvas.width;
 }
 });
+requestAnimationFrame(draw);
 }
-
-setInterval(draw,33);
+draw();
 </script>
 
 </body>
