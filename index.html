@@ -83,6 +83,7 @@ function nextPage(n){
   document.getElementById("page"+n).classList.add("active");
 
   if(n===12) showResult();
+  if(n===13) loadMoon(); // ONLY REQUIRED HOOK
 }
 
 function correct(){ score++; }
@@ -113,6 +114,41 @@ function showResult(){
 
   document.getElementById("result").innerHTML =
     "Score: " + score + "/" + total + "<br><br>" + text;
+}
+
+/* 🌙 ONLY MOON FUNCTION (AS REQUESTED) */
+function loadMoon(){
+
+  const birthDate = "2002-06-03";
+
+  // 🌑 Moon till 3 June 2002 (API IMAGE)
+  fetch("https://api.farmsense.net/v1/moonphases/?d=" + Math.floor(new Date(birthDate).getTime()/1000))
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("moonBeforeImg").src =
+      getMoonImage(data[0].Phase);
+
+    document.getElementById("moonBeforeText").innerText =
+      "Phase: " + data[0].Phase;
+  });
+
+  // 🌕 Moon after 3 June 2002 (LOCAL IMAGE)
+  document.getElementById("moonAfterImg").src = "image.img";
+  document.getElementById("moonAfterText").innerText =
+    "Your local moon image (after 3 June 2002 reference)";
+}
+
+/* helper mapping API phase → image */
+function getMoonImage(phase){
+  phase = phase.toLowerCase();
+
+  if(phase.includes("new")) return "https://i.imgur.com/3QfZ6Vx.png";
+  if(phase.includes("waxing")) return "https://i.imgur.com/9bXvY6T.png";
+  if(phase.includes("first")) return "https://i.imgur.com/2QxYx8M.png";
+  if(phase.includes("full")) return "https://i.imgur.com/5y7QG8c.png";
+  if(phase.includes("last")) return "https://i.imgur.com/7QJxQ3a.png";
+
+  return "https://i.imgur.com/5y7QG8c.png";
 }
 </script>
 
@@ -203,15 +239,17 @@ function showResult(){
 <button onclick="nextPage(13)">Next</button>
 </div>
 
-<!-- 🌙 FIXED MOON PAGE (ONLY CHANGE YOU WANTED) -->
+<!-- 🌙 FINAL MOON PAGE (STRICT REQUIREMENT ONLY) -->
 <div id="page13" class="page">
-<h1>🌙 Moon Timeline</h1>
+<h1>🌙 Moon Comparison</h1>
 
-<h3>🌑 Moon till 3 June 2002</h3>
-<img src="image.img" style="width:260px;border-radius:15px;">
+<h3>🌑 Moon till 3 June 2002 (API)</h3>
+<img id="moonBeforeImg" style="width:260px;border-radius:15px;">
+<p id="moonBeforeText"></p>
 
-<h3>🌕 Moon after 3 June 2002</h3>
-<img src="image.img" style="width:260px;border-radius:15px;">
+<h3>🌕 Moon after 3 June 2002 (Local)</h3>
+<img id="moonAfterImg" style="width:260px;border-radius:15px;">
+<p id="moonAfterText"></p>
 
 <br>
 <button onclick="nextPage(14)">Next</button>
