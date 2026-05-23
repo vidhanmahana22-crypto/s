@@ -62,9 +62,7 @@ iframe {
 <body>
 
 <canvas id="bg"></canvas>
-<canvas id="confetti"></canvas>
 
-<!-- AUDIO -->
 <audio id="bgMusic" loop>
   <source src="Apna-Bana-Le.mp3" type="audio/mpeg">
 </audio>
@@ -87,10 +85,7 @@ function nextPage(n){
   if(n===12) showResult();
 }
 
-function correct(){
-  score++;
-  startConfetti(); // ⭐ CONFETTI ON EVERY CORRECT ANSWER
-}
+function correct(){ score++; }
 
 function annoyingYes(){ alert("Wrong answer 😤 try again"); }
 
@@ -118,40 +113,6 @@ function showResult(){
 
   document.getElementById("result").innerHTML =
     "Score: " + score + "/" + total + "<br><br>" + text;
-}
-
-/* 🎆 CONFETTI */
-function startConfetti(){
-  let c=document.getElementById("confetti");
-  let ctx=c.getContext("2d");
-
-  c.width=window.innerWidth;
-  c.height=window.innerHeight;
-
-  let p=[];
-  for(let i=0;i<80;i++){
-    p.push({
-      x:Math.random()*c.width,
-      y:Math.random()*c.height,
-      r:Math.random()*5
-    });
-  }
-
-  function draw(){
-    ctx.clearRect(0,0,c.width,c.height);
-    ctx.fillStyle="white";
-
-    p.forEach(o=>{
-      ctx.beginPath();
-      ctx.arc(o.x,o.y,o.r,0,Math.PI*2);
-      ctx.fill();
-      o.y+=3;
-      if(o.y>c.height)o.y=0;
-    });
-
-    requestAnimationFrame(draw);
-  }
-  draw();
 }
 </script>
 
@@ -242,18 +203,15 @@ function startConfetti(){
 <button onclick="nextPage(13)">Next</button>
 </div>
 
-<!-- 🌙 UPDATED MOON PAGE (ONLY CHANGE YOU REQUESTED) -->
+<!-- 🌙 FIXED MOON PAGE (ONLY CHANGE YOU WANTED) -->
 <div id="page13" class="page">
-<h1>🌙 Moon + Birthday Timeline</h1>
+<h1>🌙 Moon Timeline</h1>
 
-<h3>🌑 Before 3 June 2002</h3>
-<img src="image.img" style="width:250px;border-radius:15px;">
+<h3>🌑 Moon till 3 June 2002</h3>
+<img src="image.img" style="width:260px;border-radius:15px;">
 
-<h3>🌕 After 3 June 2002</h3>
-<img src="image.img" style="width:250px;border-radius:15px;">
-
-<h3>🎂 Birthday Person</h3>
-<img src="image.img" style="width:250px;border-radius:15px;">
+<h3>🌕 Moon after 3 June 2002</h3>
+<img src="image.img" style="width:260px;border-radius:15px;">
 
 <br>
 <button onclick="nextPage(14)">Next</button>
@@ -320,7 +278,7 @@ Mai aur meri tanhai aksar yeah baate karte
 
 </div>
 
-<!-- PARTICLES -->
+<!-- BACKGROUND (UNCHANGED) -->
 <script>
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
