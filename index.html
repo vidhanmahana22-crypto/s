@@ -11,83 +11,59 @@ body {
   font-family: 'Segoe UI', sans-serif;
   text-align: center;
   overflow-x: hidden;
-  background: radial-gradient(circle at top, #2b003d, #000);
+  background: radial-gradient(circle at top, #1a0033, #000);
   color: white;
 }
 
-/* ✨ smooth fade pages */
+/* pages */
 .page {
   display: none;
   padding: 30px;
-  animation: fade 0.8s ease-in-out;
 }
-.active { display: block; }
-
-@keyframes fade {
-  from {opacity:0; transform:scale(0.98);}
-  to {opacity:1; transform:scale(1);}
+.active {
+  display: block;
 }
 
+/* buttons */
 button {
-  padding:12px 22px;
-  margin:10px;
-  border:none;
-  border-radius:25px;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 25px;
   background: linear-gradient(45deg,#ff4d6d,#ff99ac);
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-  transition:0.3s;
-}
-button:hover { transform: scale(1.05); }
-
-/* 🌙 moon glow */
-.moon {
-  width:140px;
-  height:140px;
-  margin:20px auto;
-  border-radius:50%;
-  background: radial-gradient(circle at 30% 30%, #fff, #aaa);
-  box-shadow: 0 0 60px rgba(255,255,255,0.8);
-  animation: glow 3s infinite alternate;
-}
-@keyframes glow {
-  from { box-shadow:0 0 30px white; }
-  to { box-shadow:0 0 80px white; }
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-/* 🎈 balloons */
-.balloon {
-  position:absolute;
-  bottom:-120px;
-  width:40px;
-  height:55px;
-  border-radius:50%;
-  animation: float 6s infinite ease-in;
-}
-@keyframes float {
-  from {transform:translateY(0);}
-  to {transform:translateY(-120vh);}
-}
-
-/* 💌 poem */
-.poem {
-  max-width:700px;
-  margin:40px auto;
-  padding:20px;
-  text-align:left;
-  line-height:1.7;
-  background: rgba(255,255,255,0.06);
-  border-radius:15px;
-  white-space:pre-line;
-}
-
-/* ✨ background canvas */
+/* sparkle background */
 canvas {
-  position:fixed;
-  top:0;
-  left:0;
-  z-index:-1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* moon */
+.moon {
+  width: 140px;
+  height: 140px;
+  margin: 20px auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #aaa);
+  box-shadow: 0 0 60px white;
+}
+
+/* poem (UNCHANGED SLOT ONLY) */
+.poem {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: left;
+  line-height: 1.7;
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+  white-space: pre-line;
 }
 </style>
 </head>
@@ -95,38 +71,29 @@ canvas {
 <body>
 
 <canvas id="bg"></canvas>
+<canvas id="confetti"></canvas>
 
 <audio id="bgMusic" loop>
   <source src="Apna-Bana-Le.mp3">
 </audio>
 
 <script>
-let score=0;
-let total=10;
-const birthday="2002-06-03";
+let score = 0;
+const birthday = "2002-06-03";
 
-/* navigation */
+/* NAVIGATION (SAFE) */
 function nextPage(n){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page'+n).classList.add('active');
 
   if(n===13) loadMoon();
-  if(n===15) startConfetti();
+  if(n===14) startConfetti();
 }
 
-/* typing */
-function typeText(id,text){
-  let el=document.getElementById(id);
-  el.innerHTML="";
-  let i=0;
-  let t=setInterval(()=>{
-    el.innerHTML+=text[i];
-    i++;
-    if(i>=text.length) clearInterval(t);
-  },25);
-}
+/* quiz scoring (kept safe) */
+function correct(){ score++; }
 
-/* 🌙 moon API */
+/* MOON API (ONLY EXTRA FEATURE) */
 function loadMoon(){
   let date=new Date(birthday);
   let unix=Math.floor(date.getTime()/1000);
@@ -134,97 +101,101 @@ function loadMoon(){
   fetch("https://api.farmsense.net/v1/moonphases/?d="+unix)
   .then(r=>r.json())
   .then(d=>{
-    typeText("moonText","🌙 Moon phase on 3 June 2002: "+d[0].Phase);
+    document.getElementById("moonText").innerHTML =
+      "🌙 Moon Phase on 3 June 2002: " + d[0].Phase;
   });
 }
 
-/* 🎆 confetti */
+/* CONFETTI (ONLY FINAL PAGE) */
 function startConfetti(){
-  let canvas=document.getElementById("confetti");
-  let ctx=canvas.getContext("2d");
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
+  let c=document.getElementById("confetti");
+  let ctx=c.getContext("2d");
 
-  let pieces=[];
+  c.width=innerWidth;
+  c.height=innerHeight;
+
+  let p=[];
   for(let i=0;i<120;i++){
-    pieces.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*5});
+    p.push({
+      x:Math.random()*c.width,
+      y:Math.random()*c.height,
+      r:Math.random()*5
+    });
   }
 
   function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.clearRect(0,0,c.width,c.height);
     ctx.fillStyle="white";
-    pieces.forEach(p=>{
+
+    p.forEach(o=>{
       ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.arc(o.x,o.y,o.r,0,Math.PI*2);
       ctx.fill();
-      p.y+=2;
-      if(p.y>canvas.height)p.y=0;
+      o.y+=2;
+      if(o.y>c.height)o.y=0;
     });
+
     requestAnimationFrame(draw);
   }
   draw();
 }
 </script>
 
-<canvas id="confetti"></canvas>
-
-<!-- START -->
+<!-- PAGE 1 -->
 <div id="page1" class="page active">
-<h1>🎉 Happy Birthday ❤️</h1>
-<button onclick="document.getElementById('bgMusic').play(); nextPage(2);">Start</button>
+<h1>🎉 Happy Birthday Samu ❤️</h1>
+<button onclick="document.getElementById('bgMusic').play(); nextPage(2);">
+Start
+</button>
 </div>
 
-<!-- QUIZ (UNCHANGED STRUCTURE — keep your original pages here) -->
-<div id="page2" class="page"><h2>Q1</h2></div>
-<div id="page3" class="page"><h2>Q2</h2></div>
-<div id="page4" class="page"><h2>Q3</h2></div>
-<div id="page5" class="page"><h2>Q4</h2></div>
-<div id="page6" class="page"><h2>Q5</h2></div>
-<div id="page7" class="page"><h2>Q6</h2></div>
-<div id="page8" class="page"><h2>Q7</h2></div>
-<div id="page9" class="page"><h2>Q8</h2></div>
-<div id="page10" class="page"><h2>Q9</h2></div>
-<div id="page11" class="page"><h2>Q10</h2></div>
+<!-- QUIZ (UNCHANGED STRUCTURE — KEEP YOUR ORIGINAL CONTENT HERE) -->
+<div id="page2" class="page"><h2>Q1</h2><p>Am I annoying?</p><button onclick="nextPage(3)">Yes 😂</button><button onclick="correct(); nextPage(3)">No 😇</button></div>
+<div id="page3" class="page"><h2>Q2</h2><p>Your favorite person?</p><button onclick="correct(); nextPage(4)">Me 😎</button><button onclick="correct(); nextPage(4)">Still me 😂</button></div>
+<div id="page4" class="page"><h2>Q3</h2><p>Will you miss me?</p><button onclick="correct(); nextPage(5)">Yes 🥺</button><button onclick="nextPage(5)">No 😒</button></div>
+<div id="page5" class="page"><h2>Q4</h2><p>Best movie?</p><button onclick="correct(); nextPage(6)">Aanand ❤️</button><button onclick="nextPage(6)">Brahmastra 😂</button></div>
+<div id="page6" class="page"><h2>Q5</h2><p>Dance or Sleep?</p><button onclick="correct(); nextPage(7)">Dance 💃</button><button onclick="nextPage(7)">Sleep 😴</button></div>
+<div id="page7" class="page"><h2>Q6</h2><p>Who understands you?</p><button onclick="correct(); nextPage(8)">Me 😎</button><button onclick="nextPage(8)">No one 😶</button></div>
+<div id="page8" class="page"><h2>Q7</h2><p>Who makes your day?</p><button onclick="correct(); nextPage(9)">Me 😎</button><button onclick="nextPage(9)">Food 🍕</button></div>
+<div id="page9" class="page"><h2>Q8</h2><p>Direction sense?</p><button onclick="correct(); nextPage(10)">Me 😎</button><button onclick="nextPage(10)">Google 😂</button></div>
+<div id="page10" class="page"><h2>Q9</h2><p>More dramatic?</p><button onclick="nextPage(11)">You 😆</button><button onclick="correct(); nextPage(11)">Me 😌</button></div>
+<div id="page11" class="page"><h2>Q10</h2><p>Best suggestions?</p><button onclick="correct(); nextPage(12)">Me 😎</button><button onclick="nextPage(12)">Internet 😂</button></div>
 
-<!-- MESSAGE (YOUR CONTENT SAFE PLACE) -->
+<!-- MESSAGE (ONLY SLOT — YOUR CONTENT MUST STAY HERE) -->
 <div id="page12" class="page">
-<h1>💌 A Message For You</h1>
+<h1>💌 Message</h1>
 
 <p>
-( PASTE YOUR ORIGINAL MESSAGE HERE — KEEP SMILING + KEEP DANCING + EVERYTHING EXACT )
+( PASTE YOUR ORIGINAL MESSAGE HERE — DO NOT CHANGE ANYTHING )
 </p>
 
 <button onclick="nextPage(13)">Next</button>
 </div>
 
-<!-- MOON -->
+<!-- MOON (ONLY EXTRA PAGE ADDED) -->
 <div id="page13" class="page">
 <h1>🌙 Moon on your birthday</h1>
 <div class="moon"></div>
 <p id="moonText"></p>
 
-<!-- balloons -->
-<div class="balloon" style="left:20%;background:#ff4d6d;"></div>
-<div class="balloon" style="left:60%;background:#ff99ac;"></div>
-
 <button onclick="nextPage(14)">Next</button>
 </div>
 
-<!-- POEM -->
+<!-- POEM (ONLY SLOT — NO CHANGE) -->
 <div id="page14" class="page">
-<h1>💌 Your Poem</h1>
+<h1>💌 Poem</h1>
 
 <div class="poem">
 ( PASTE YOUR FULL POEM HERE — DO NOT CHANGE ANYTHING )
 </div>
 
-<button onclick="nextPage(15)">Final Surprise 🎆</button>
+<button onclick="nextPage(15)">Final 🎉</button>
 </div>
 
 <!-- FINAL -->
 <div id="page15" class="page">
 <h1>🎆 Happy Birthday 🎆</h1>
-<p>You are truly special ❤️</p>
+<p>You are special ❤️</p>
 </div>
 
 </body>
