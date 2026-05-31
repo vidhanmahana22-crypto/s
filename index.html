@@ -1,308 +1,261 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Birthday</title>
+<title>Birthday Surprise</title>
 
 <style>
-body{
+body {
   margin:0;
-  background:#0b0b0b;
-  color:white;
-  font-family:Arial;
+  font-family: Arial;
+  background: #ffeef5;
   text-align:center;
 }
 
-.page{
-  display:none;
-  height:100vh;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-}
-.active{display:flex;}
-
-button{
-  padding:10px 20px;
-  margin-top:15px;
-  cursor:pointer;
-}
+.page { display:none; padding:20px; }
+.active { display:block; }
 
 /* LOGIN */
-.login-container{
+.login-container {
   display:flex;
-  gap:40px;
-  align-items:center;
+  height:100vh;
 }
-
-.login-left img{
-  width:200px;
-  border-radius:20px;
+.left {
+  flex:1;
+  background:#ffc0cb;
 }
-
-/* PIN BOX */
-.box{
-  width:40px;
-  height:50px;
-  border:2px solid white;
-  border-radius:8px;
-  font-size:24px;
+.right {
+  flex:1;
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
 }
-.box.active{border-color:yellow;}
 
-.keypad{
+.pin-boxes {
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+.box {
+  width:40px;
+  height:50px;
+  border:2px solid black;
+  font-size:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.keypad {
   display:grid;
   grid-template-columns:repeat(3,60px);
   gap:10px;
-  justify-content:center;
 }
-
-.keypad button{
-  height:60px;
-  font-size:20px;
-  border:none;
-  border-radius:10px;
-  background:#222;
-  color:white;
+.key {
+  padding:15px;
+  background:white;
+  border:1px solid black;
+  cursor:pointer;
 }
-.keypad button:hover{background:#444;}
 
 /* CAKE */
-.cake-container{
+.cake {
+  width:200px;
+  height:120px;
+  background:brown;
+  margin:50px auto;
   position:relative;
-  width:320px;
+  border-radius:10px;
 }
-#knife{
+
+.candle {
+  width:10px;
+  height:40px;
+  background:white;
   position:absolute;
-  width:120px;
+  top:-40px;
+}
+
+.flame {
+  width:10px;
+  height:10px;
+  background:yellow;
+  border-radius:50%;
+  margin:auto;
+}
+
+.hidden { display:none; }
+
+/* KNIFE */
+#knife {
+  width:80px;
+  position:absolute;
+  left:50px;
+  top:300px;
   cursor:grab;
 }
 
-/* CANDLES */
-.cake-top{
-  position:relative;
-  width:300px;
-  height:200px;
-  background:linear-gradient(#5a2c1d,#3b1f14);
-  border-radius:20px;
-}
-
-.candle{
-  position:absolute;
-  bottom:60px;
-  width:12px;
+/* BALLOONS */
+.balloon {
+  width:40px;
   height:50px;
-  background:repeating-linear-gradient(45deg,pink,pink 5px,white 5px,white 10px);
-  border-radius:5px;
-}
-
-.flame{
-  position:absolute;
-  top:-18px;
-  left:50%;
-  transform:translateX(-50%);
-  width:10px;
-  height:18px;
-  background:radial-gradient(circle, yellow 40%, orange 70%);
+  background:red;
   border-radius:50%;
-  animation:flicker 0.2s infinite alternate;
-}
-
-@keyframes flicker{
-  from{transform:translateX(-50%) scale(1);}
-  to{transform:translateX(-50%) scale(1.2);}
-}
-
-.smoke{
   position:absolute;
-  top:-25px;
-  left:50%;
-  transform:translateX(-50%);
-  width:8px;
-  height:20px;
-  background:rgba(200,200,200,0.4);
-  border-radius:50%;
-  animation:smokeUp 1s forwards;
+  bottom:-60px;
+  animation:float 5s linear forwards;
 }
 
-@keyframes smokeUp{
-  to{transform:translate(-50%,-40px);opacity:0;}
+@keyframes float {
+  to { transform:translateY(-800px); }
 }
-
-.hidden{display:none;}
 </style>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-<div id="page1" class="page active">
-<h1>Login 🔐</h1>
+<div id="login" class="page active">
+  <div class="login-container">
+    <div class="left"></div>
+    <div class="right">
 
-<div class="login-container">
-<div class="login-left">
-<img src="image.jpeg">
+      <div class="pin-boxes">
+        <div class="box" id="b0"></div>
+        <div class="box" id="b1"></div>
+        <div class="box" id="b2"></div>
+        <div class="box" id="b3"></div>
+      </div>
+
+      <div class="keypad">
+        <div class="key" onclick="press(1)">1</div>
+        <div class="key" onclick="press(2)">2</div>
+        <div class="key" onclick="press(3)">3</div>
+        <div class="key" onclick="press(4)">4</div>
+        <div class="key" onclick="press(5)">5</div>
+        <div class="key" onclick="press(6)">6</div>
+        <div class="key" onclick="press(7)">7</div>
+        <div class="key" onclick="press(8)">8</div>
+        <div class="key" onclick="press(9)">9</div>
+        <div class="key" onclick="clearPin()">C</div>
+        <div class="key" onclick="press(0)">0</div>
+        <div class="key" onclick="submitPin()">OK</div>
+      </div>
+
+      <p id="hint"></p>
+
+    </div>
+  </div>
 </div>
 
-<div>
-
-<div style="display:flex; gap:10px; justify-content:center; margin-bottom:20px;">
-  <div class="box"></div>
-  <div class="box"></div>
-  <div class="box"></div>
-  <div class="box"></div>
-</div>
-
-<p id="hint"></p>
-
-<div class="keypad">
-<button onclick="press(1)">1</button>
-<button onclick="press(2)">2</button>
-<button onclick="press(3)">3</button>
-
-<button onclick="press(4)">4</button>
-<button onclick="press(5)">5</button>
-<button onclick="press(6)">6</button>
-
-<button onclick="press(7)">7</button>
-<button onclick="press(8)">8</button>
-<button onclick="press(9)">9</button>
-
-<button onclick="del()">⌫</button>
-<button onclick="press(0)">0</button>
-<button onclick="checkPin()">✔</button>
-</div>
-
-</div>
-</div>
-</div>
-
-<!-- CAKE CUT -->
-<div id="page2" class="page">
-<h1>🎂 Happy Birthday ❤️</h1>
-<p>Drag knife to cut cake</p>
-
-<div class="cake-container">
-  <img id="cake" src="cake.jpeg" width="100%">
-  <img id="knife" src="knife.jpeg">
-</div>
-
-<button id="next1" class="hidden" onclick="nextPage(3)">Next</button>
+<!-- BIRTHDAY -->
+<div id="birthday" class="page">
+  <h1>Happy Birthday Samu 🎉</h1>
+  <p>I made something for you ❤️</p>
+  <button onclick="next('candles')">Next</button>
 </div>
 
 <!-- CANDLES -->
-<div id="page3" class="page">
-<h1>Make a wish & blow candles 🕯️</h1>
+<div id="candles" class="page">
+  <h2>Make a wish & blow candles</h2>
 
-<div class="cake-top" id="cakeTop"></div>
+  <div class="cake">
+    <div class="candle" style="left:40px"><div class="flame"></div></div>
+    <div class="candle" style="left:90px"><div class="flame"></div></div>
+    <div class="candle" style="left:140px"><div class="flame"></div></div>
+  </div>
 
-<button onclick="blow()">Blow</button>
-<button onclick="nextPage(4)">Next</button>
+  <button onclick="blow()">Blow</button>
 </div>
 
-<!-- END -->
-<div id="page4" class="page">
-<h1>Done 🎉</h1>
+<!-- CAKE CUT -->
+<div id="cut" class="page">
+  <h2>Cut the cake 🎂</h2>
+
+  <div class="cake" id="cake"></div>
+  <img src="knife.jpeg" id="knife">
+
+</div>
+
+<!-- BALLOONS -->
+<div id="balloons" class="page">
+  <h2>Yay 🎈🎈🎈</h2>
+  <button onclick="next('quiz')">Next</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="page">
+  <h2>Let’s test how well you know me 😉</h2>
 </div>
 
 <script>
-
-/* PAGE NAV */
-function nextPage(n){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById("page"+n).classList.add("active");
-}
-
-/* PIN SYSTEM */
-let input="";
-
-function updateUI(){
-  let boxes=document.querySelectorAll(".box");
-  boxes.forEach((b,i)=>{
-    b.textContent=input[i]?"•":"";
-    b.classList.toggle("active", i===input.length);
-  });
-}
+let pin="";
 
 function press(num){
-  if(input.length<4){
-    input+=num;
-    updateUI();
+  if(pin.length<4){
+    pin+=num;
+    document.getElementById("b"+(pin.length-1)).innerText="*";
   }
 }
 
-function del(){
-  input=input.slice(0,-1);
-  updateUI();
+function clearPin(){
+  pin="";
+  for(let i=0;i<4;i++) document.getElementById("b"+i).innerText="";
 }
 
-function checkPin(){
-  let hint=document.getElementById("hint");
-
-  if(input==="0502"){
-    nextPage(2);
-  }else{
-    hint.innerText="Wrong PIN 😉";
-    input="";
-    updateUI();
+function submitPin(){
+  if(pin==="0502"){
+    next("birthday");
+  } else if(pin==="0306"){
+    document.getElementById("hint").innerText=
+    "Not your birthdate Samu 😉 Try someone special from Bangalore ❤️";
+    clearPin();
+  } else {
+    document.getElementById("hint").innerText=
+    "Incorrect pin… try birthdate of someone special from Bangalore ❤️";
+    clearPin();
   }
 }
 
-updateUI();
+function next(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
 
-/* KNIFE */
+function blow(){
+  document.querySelectorAll(".flame").forEach(f=>f.style.display="none");
+  setTimeout(()=>next("cut"),1000);
+}
+
+/* KNIFE DRAG FIX */
 let knife=document.getElementById("knife");
-let cake=document.getElementById("cake");
-let dragging=false;
+let isDown=false;
 
-knife.addEventListener("mousedown", ()=>dragging=true);
-document.addEventListener("mouseup", ()=>dragging=false);
+knife.onmousedown=()=> isDown=true;
+document.onmouseup=()=> isDown=false;
 
-document.addEventListener("mousemove",(e)=>{
-  if(dragging){
-    knife.style.left=(e.clientX-60)+"px";
-    knife.style.top=(e.clientY-60)+"px";
+document.onmousemove=(e)=>{
+  if(isDown){
+    knife.style.left=e.pageX+"px";
+    knife.style.top=e.pageY+"px";
 
-    let rect=cake.getBoundingClientRect();
-
-    if(e.clientX>rect.left && e.clientX<rect.right &&
-       e.clientY>rect.top && e.clientY<rect.bottom){
-
-        cake.src="cake_cut.jpeg";
-        document.getElementById("next1").classList.remove("hidden");
+    if(e.pageY<250){
+      next("balloons");
+      releaseBalloons();
+      isDown=false;
     }
   }
-});
-
-/* CREATE CANDLES */
-let cakeTop=document.getElementById("cakeTop");
-
-for(let i=0;i<5;i++){
-  let c=document.createElement("div");
-  c.className="candle";
-  c.style.left=(40 + i*50)+"px";
-
-  let flame=document.createElement("div");
-  flame.className="flame";
-
-  c.appendChild(flame);
-  cakeTop.appendChild(c);
 }
 
-/* BLOW */
-function blow(){
-  document.querySelectorAll(".flame").forEach(f=>{
-    f.remove();
-
-    let smoke=document.createElement("div");
-    smoke.className="smoke";
-    f.parentElement.appendChild(smoke);
-  });
+function releaseBalloons(){
+  for(let i=0;i<10;i++){
+    let b=document.createElement("div");
+    b.className="balloon";
+    b.style.left=Math.random()*window.innerWidth+"px";
+    document.body.appendChild(b);
+  }
 }
-
 </script>
 
 </body>
