@@ -12,37 +12,40 @@ body {
   background: #ffeef5;
 }
 
-/* starfield canvas */
+/* ── CANVAS ── */
 canvas {
   position: fixed;
   top: 0;
   left: 0;
   z-index: -1;
   pointer-events: none;
+  background: transparent;
 }
 
-/* pages */
+/* ── PAGE SYSTEM (IMPORTANT FIX) ── */
 .page {
   display: none;
   min-height: 100vh;
-  padding: 30px 20px;
+  width: 100%;
+  position: relative;
 }
 
-.active {
+.page.active {
   display: block;
 }
 
-/* DARK PAGES */
+/* ── DARK PAGES (QUIZ + ONWARD) ── */
 .dark-page {
   background: transparent;
   color: white;
   min-height: 100vh;
 }
 
-/* QUIZ layout fix */
+/* ── QUIZ LAYOUT FIX ── */
 .quiz-page {
   display: none;
   min-height: 100vh;
+  width: 100%;
   padding: 60px 20px;
   align-items: center;
   justify-content: center;
@@ -53,23 +56,23 @@ canvas {
   display: flex;
 }
 
-/* BUTTONS */
-.fancy-btn {
-  padding: 12px 28px;
-  margin: 10px 6px;
+/* ── BUTTONS ── */
+button {
+  padding: 12px 20px;
+  margin: 10px;
   border: none;
-  border-radius: 50px;
+  border-radius: 25px;
   background: linear-gradient(45deg, #ff4d6d, #ff99ac);
   color: white;
   font-size: 16px;
-  font-weight: 700;
   cursor: pointer;
 }
 
-/* LOGIN */
+/* ── LOGIN FIX ── */
 .login-container {
   display: flex;
   min-height: 100vh;
+  width: 100%;
 }
 
 .left, .right {
@@ -80,13 +83,7 @@ canvas {
   flex-direction: column;
 }
 
-.left img {
-  width: 70%;
-  max-width: 300px;
-  border-radius: 16px;
-}
-
-/* PIN */
+/* ── PIN BOXES ── */
 #boxes span {
   width: 28px;
   height: 28px;
@@ -95,7 +92,7 @@ canvas {
   margin: 5px;
 }
 
-/* BIRTHDAY */
+/* ── BIRTHDAY PAGE ── */
 .bday-container {
   display: flex;
   flex-direction: column;
@@ -103,7 +100,7 @@ canvas {
   min-height: 100vh;
 }
 
-/* CANDLES */
+/* ── CANDLES PAGE (FIXED ALIGNMENT) ── */
 .candles-page {
   display: flex;
   flex-direction: column;
@@ -113,9 +110,14 @@ canvas {
   gap: 18px;
 }
 
+/* cake layout fix */
 .cake-scene {
   position: relative;
-  padding-top: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
 }
 
 .candles-above {
@@ -153,10 +155,15 @@ canvas {
   height: 150px;
   background: white;
   border-radius: 18px;
-  position: relative;
 }
 
-/* CAKE CUT */
+/* blow button safety */
+.blow-btn {
+  margin-top: 10px;
+  z-index: 5;
+}
+
+/* ── CUT PAGE ── */
 .cut-area {
   position: relative;
   width: 320px;
@@ -178,11 +185,12 @@ canvas {
   cursor: grab;
 }
 
-/* BALLOONS */
+/* ── BALLOONS ── */
 #balloons {
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: 999;
 }
 
 .balloon {
@@ -197,7 +205,7 @@ canvas {
   100% { bottom: 110%; }
 }
 
-/* QUIZ TEXT */
+/* ── TEXT ── */
 h1 {
   text-shadow: 0 0 15px #ff99cc;
 }
