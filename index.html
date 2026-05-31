@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Birthday Surprise</title>
+<title>Birthday</title>
 
 <style>
 body {
   margin:0;
-  font-family: Arial;
-  background: #ffeef5;
+  font-family:Arial;
+  background:#ffeef5;
   text-align:center;
 }
 
@@ -38,8 +38,8 @@ body {
   margin-bottom:20px;
 }
 .box {
-  width:40px;
-  height:50px;
+  width:45px;
+  height:55px;
   border:2px solid black;
   font-size:24px;
   display:flex;
@@ -59,40 +59,44 @@ body {
   cursor:pointer;
 }
 
-/* CAKE */
+/* CAKE BASE */
 .cake {
-  width:200px;
-  height:120px;
-  background:brown;
+  width:220px;
+  height:130px;
+  background:#8B4513;
   margin:50px auto;
   position:relative;
   border-radius:10px;
 }
 
+/* CANDLES */
 .candle {
-  width:10px;
+  width:12px;
   height:40px;
-  background:white;
   position:absolute;
   top:-40px;
+  border-radius:3px;
 }
+
+.red { background:#ff4d4d; }
+.blue { background:#4da6ff; }
+.yellow { background:#ffd11a; }
 
 .flame {
   width:10px;
-  height:10px;
-  background:yellow;
+  height:14px;
+  background:orange;
   border-radius:50%;
   margin:auto;
+  box-shadow:0 0 10px yellow;
 }
-
-.hidden { display:none; }
 
 /* KNIFE */
 #knife {
-  width:80px;
+  width:90px;
   position:absolute;
-  left:50px;
-  top:300px;
+  left:100px;
+  top:350px;
   cursor:grab;
 }
 
@@ -106,7 +110,6 @@ body {
   bottom:-60px;
   animation:float 5s linear forwards;
 }
-
 @keyframes float {
   to { transform:translateY(-800px); }
 }
@@ -158,12 +161,12 @@ body {
 
 <!-- CANDLES -->
 <div id="candles" class="page">
-  <h2>Make a wish & blow candles</h2>
+  <h2>Make a wish & blow candles ✨</h2>
 
   <div class="cake">
-    <div class="candle" style="left:40px"><div class="flame"></div></div>
-    <div class="candle" style="left:90px"><div class="flame"></div></div>
-    <div class="candle" style="left:140px"><div class="flame"></div></div>
+    <div class="candle red" style="left:50px"><div class="flame"></div></div>
+    <div class="candle blue" style="left:100px"><div class="flame"></div></div>
+    <div class="candle yellow" style="left:150px"><div class="flame"></div></div>
   </div>
 
   <button onclick="blow()">Blow</button>
@@ -173,20 +176,20 @@ body {
 <div id="cut" class="page">
   <h2>Cut the cake 🎂</h2>
 
-  <div class="cake" id="cake"></div>
+  <img src="cake.jpeg" id="cakeImg" width="320">
+
+  <br><br>
+
   <img src="knife.jpeg" id="knife">
 
+  <h3 id="yay" style="display:none;">Yay 🎉</h3>
+
+  <button id="nextBtn" style="display:none;" onclick="next('balloons')">Next</button>
 </div>
 
 <!-- BALLOONS -->
 <div id="balloons" class="page">
   <h2>Yay 🎈🎈🎈</h2>
-  <button onclick="next('quiz')">Next</button>
-</div>
-
-<!-- QUIZ -->
-<div id="quiz" class="page">
-  <h2>Let’s test how well you know me 😉</h2>
 </div>
 
 <script>
@@ -228,33 +231,39 @@ function blow(){
   setTimeout(()=>next("cut"),1000);
 }
 
-/* KNIFE DRAG FIX */
-let knife=document.getElementById("knife");
-let isDown=false;
+/* CAKE CUT SIMPLE */
+let knife = document.getElementById("knife");
+let cake = document.getElementById("cakeImg");
 
-knife.onmousedown=()=> isDown=true;
-document.onmouseup=()=> isDown=false;
+let isDragging = false;
 
-document.onmousemove=(e)=>{
-  if(isDown){
-    knife.style.left=e.pageX+"px";
-    knife.style.top=e.pageY+"px";
+knife.onmousedown = () => isDragging = true;
+document.onmouseup = () => isDragging = false;
 
-    if(e.pageY<250){
-      next("balloons");
-      releaseBalloons();
-      isDown=false;
+document.onmousemove = (e) => {
+  if(isDragging){
+    knife.style.left = e.pageX - 40 + "px";
+    knife.style.top = e.pageY - 20 + "px";
+
+    let c = cake.getBoundingClientRect();
+    let k = knife.getBoundingClientRect();
+
+    if(
+      k.left < c.right &&
+      k.right > c.left &&
+      k.top < c.bottom &&
+      k.bottom > c.top
+    ){
+      cutCake();
     }
   }
 }
 
-function releaseBalloons(){
-  for(let i=0;i<10;i++){
-    let b=document.createElement("div");
-    b.className="balloon";
-    b.style.left=Math.random()*window.innerWidth+"px";
-    document.body.appendChild(b);
-  }
+function cutCake(){
+  document.getElementById("cakeImg").src = "cake_cut.jpeg";
+  document.getElementById("yay").style.display = "block";
+  document.getElementById("nextBtn").style.display = "inline-block";
+  isDragging = false;
 }
 </script>
 
