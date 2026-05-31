@@ -1,4 +1,4 @@
-/* ── STARFIELD (dark pages only) ── */
+/* STARFIELD */
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
@@ -11,7 +11,7 @@ window.addEventListener("resize", () => {
 });
 
 let particles = [];
-for (let i = 0; i < 90; i++) {
+for (let i = 0; i < 80; i++) {
   particles.push({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
@@ -19,15 +19,14 @@ for (let i = 0; i < 90; i++) {
   });
 }
 
-function drawBg() {
+function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "rgba(255,153,204,0.55)";
+  ctx.fillStyle = "rgba(255,153,204,0.6)";
 
   particles.forEach(p => {
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
     ctx.fill();
-
     p.y += 0.4;
     if (p.y > canvas.height) {
       p.y = 0;
@@ -35,268 +34,95 @@ function drawBg() {
     }
   });
 
-  requestAnimationFrame(drawBg);
+  requestAnimationFrame(draw);
 }
-drawBg();
+draw();
 
-/* ── canvas visibility ── */
-function updateCanvas(pageEl) {
-  canvas.style.display = pageEl.classList.contains("dark-page") ? "block" : "none";
-}
-
-/* ── MUSIC ── */
+/* MUSIC */
 function startMusic() {
   const m = document.getElementById("bgMusic");
   m.volume = 0.3;
   m.play().catch(() => {});
 }
 
-/* ── PIN ── */
+/* PIN */
 let pin = "";
 
 function press(n) {
-  if (pin.length < 4) {
-    pin += n;
-    updateBoxes();
-  }
-}
-
-function updateBoxes() {
-  document.querySelectorAll("#boxes span").forEach((b, i) => {
-    b.style.background = i < pin.length ? "#e75480" : "white";
-  });
+  if (pin.length < 4) pin += n;
 }
 
 function clearPin() {
   pin = "";
-  updateBoxes();
 }
 
 function checkPin() {
   if (pin === "0502") {
     startMusic();
     go("birthday");
-  } else if (pin === "0306") {
-    document.getElementById("msg").innerText =
-      "Not your birthday Samu 😉 try someone special from Bangalore ❤️";
-    clearPin();
-  } else {
-    document.getElementById("msg").innerText =
-      "Incorrect PIN 💭 Hint: birthday of someone special to you";
-    clearPin();
   }
 }
 
-/* ── RESET STATES (IMPORTANT FIX) ── */
+/* RESET FIX (NO GHOST CANDLES) */
 let wasCut = false;
-let score = 0;
 
 function resetPinkPages() {
-  // reset candles
   document.querySelectorAll(".flame").forEach(f => f.classList.remove("out"));
 
-  // reset cake cut state
   wasCut = false;
 
-  // reset cake image
   const cakeImg = document.getElementById("cakeImg");
   if (cakeImg) cakeImg.src = "cake.jpeg";
 
-  // hide UI
-  const yay = document.getElementById("yay");
-  const nextBtn = document.getElementById("nextBtn");
+  document.getElementById("yay")?.style.setProperty("display", "none");
+  document.getElementById("nextBtn")?.style.setProperty("display", "none");
 
-  if (yay) yay.style.display = "none";
-  if (nextBtn) nextBtn.style.display = "none";
-
-  // clear balloons
-  const b = document.getElementById("balloons");
-  if (b) b.innerHTML = "";
+  document.getElementById("balloons").innerHTML = "";
 }
 
-/* ── PAGE NAVIGATION (FIXED) ── */
+/* PAGE NAV */
 function go(id) {
-  document.querySelectorAll(".page").forEach(p => {
-    p.classList.remove("active");
-    p.style.display = "none";
-  });
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
 
-  const target = document.getElementById(id);
-  target.classList.add("active");
-
-  if (target.classList.contains("quiz-page")) {
-    target.style.display = "flex";
-  } else {
-    target.style.display = "block";
-  }
+  const el = document.getElementById(id);
+  el.classList.add("active");
 
   if (["birthday", "candles", "cut"].includes(id)) {
     resetPinkPages();
   }
 
-  updateCanvas(target);
-  window.scrollTo(0, 0);
+  updateCanvas(el);
 }
 
-/* init */
-updateCanvas(document.getElementById("loginPage"));
+/* STARFIELD CONTROL */
+function updateCanvas(pageEl) {
+  const darkPages = [
+    "quiz","q1","q2","q3","q4","q5","q6","q7","q8","q9","q10",
+    "result-page","moon","feel","message","poem"
+  ];
 
-/* ── CAKE DOTS ── */
-(function buildDots() {
-  const container = document.getElementById("cakeDots");
-  const cols = 7, rows = 4, padX = 20, padY = 18, W = 280, H = 150;
+  canvas.style.display = darkPages.includes(pageEl.id) ? "block" : "none";
+}
 
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const dot = document.createElement("div");
-      dot.className = "dot";
-
-      dot.style.left =
-        padX + c * ((W - padX * 2) / (cols - 1)) + "px";
-
-      dot.style.top =
-        padY + r * ((H - padY * 2) / (rows - 1)) + "px";
-
-      dot.style.background = (r + c) % 2 === 0 ? "#f9a8c9" : "#a8d4f9";
-
-      container.appendChild(dot);
-    }
-  }
-})();
-
-/* ── BLOW ── */
+/* BLOW */
 function blow() {
-  document.querySelectorAll(".flame").forEach((f, i) => {
-    setTimeout(() => f.classList.add("out"), i * 160);
-  });
-
-  setTimeout(() => go("cut"), 1700);
+  document.querySelectorAll(".flame").forEach(f => f.classList.add("out"));
+  setTimeout(() => go("cut"), 1500);
 }
 
-/* ── CAKE CUT ── */
+/* CAKE CUT */
+let drag = false;
 let knife = document.getElementById("knife");
 let cake = document.getElementById("cakeImg");
-let drag = false;
-
-knife.addEventListener("mousedown", e => {
-  drag = true;
-  e.preventDefault();
-});
-
-document.addEventListener("mouseup", () => (drag = false));
 
 document.addEventListener("mousemove", e => {
   if (!drag) return;
 
   const area = document.querySelector(".cut-area").getBoundingClientRect();
 
-  knife.style.left = e.clientX - area.left - 45 + "px";
-  knife.style.top = e.clientY - area.top - 45 + "px";
-
-  checkCut();
+  knife.style.left = e.clientX - area.left + "px";
+  knife.style.top = e.clientY - area.top + "px";
 });
 
-knife.addEventListener("touchstart", e => {
-  drag = true;
-  e.preventDefault();
-});
-
-document.addEventListener("touchend", () => (drag = false));
-
-document.addEventListener(
-  "touchmove",
-  e => {
-    if (!drag) return;
-
-    const t = e.touches[0];
-    const area = document.querySelector(".cut-area").getBoundingClientRect();
-
-    knife.style.left = t.clientX - area.left - 45 + "px";
-    knife.style.top = t.clientY - area.top - 45 + "px";
-
-    checkCut();
-  },
-  { passive: true }
-);
-
-function checkCut() {
-  if (wasCut) return;
-
-  const c = cake.getBoundingClientRect();
-  const k = knife.getBoundingClientRect();
-
-  if (k.left < c.right && k.right > c.left && k.top < c.bottom && k.bottom > c.top) {
-    wasCut = true;
-    drag = false;
-
-    cake.src = "cake_cut.jpeg";
-    document.getElementById("yay").style.display = "block";
-    document.getElementById("nextBtn").style.display = "inline-block";
-
-    launchBalloons();
-  }
-}
-
-/* ── BALLOONS ── */
-const BCOLORS = [
-  "#ff6b6b", "#ffd93d", "#6bcb77", "#4d96ff",
-  "#ff6bdf", "#ff9f43", "#a29bfe", "#fd79a8"
-];
-
-function launchBalloons() {
-  const box = document.getElementById("balloons");
-  box.innerHTML = "";
-
-  for (let i = 0; i < 22; i++) {
-    setTimeout(() => {
-      const b = document.createElement("div");
-      b.className = "balloon";
-
-      const size = 45 + Math.random() * 30;
-      b.style.width = size + "px";
-      b.style.height = size * 1.3 + "px";
-      b.style.left = Math.random() * 91 + "%";
-      b.style.background =
-        BCOLORS[Math.floor(Math.random() * BCOLORS.length)];
-      b.style.animationDuration = 3 + Math.random() * 2.5 + "s";
-
-      box.appendChild(b);
-
-      setTimeout(() => b.remove(), 7000);
-    }, i * 180);
-  }
-}
-
-/* ── QUIZ ── */
-function startQuiz() {
-  score = 0;
-  go("q1");
-}
-
-function correct() {
-  score++;
-}
-
-function annoyingYes() {
-  alert("Wrong answer 😤 try again");
-}
-
-function move(btn) {
-  btn.style.position = "fixed";
-  btn.style.left = Math.random() * 75 + "%";
-  btn.style.top = Math.random() * 75 + "%";
-}
-
-function showResult() {
-  let text = "";
-
-  if (score >= 8) text = "Elite performance 😎 clearly you know me too well";
-  else if (score >= 5) text = "Good good 😏 acceptable effort";
-  else if (score >= 3) text = "Hmm 🤨 something feels off";
-  else text = "Very suspicious behavior 😤 investigation needed";
-
-  document.getElementById("result-text").innerHTML =
-    "Score: " + score + "/10<br><br>" + text;
-
-  go("result-page");
-}
+knife?.addEventListener("mousedown", () => drag = true);
+document.addEventListener("mouseup", () => drag = false);
