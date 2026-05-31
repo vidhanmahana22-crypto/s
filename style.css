@@ -27,7 +27,7 @@ canvas {
 
 /* dark pages use the canvas starfield */
 .dark-page {
-  background: transparent;
+  background: radial-gradient(circle, #1a0033, #000);
   color: white;
 }
 
