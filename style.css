@@ -40,7 +40,10 @@ canvas {
   justify-content: center;
   flex-direction: column;
 }
-.quiz-page.active { display: flex; }
+
+.page.active.quiz-page {
+  display: flex !important;
+}
 
 /* ── BUTTONS ── */
 .fancy-btn {
