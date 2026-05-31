@@ -8,7 +8,7 @@ window.addEventListener("resize", () => {
   canvas.height = window.innerHeight;
 });
 let particles = [];
-for (let i = 0; i < 150; i++)) {
+for (let i = 0; i < 150; i++) {
   particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 2 });
 }
 function drawBg() {
