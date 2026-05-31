@@ -1,211 +1,331 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Nunito', 'Segoe UI', sans-serif;
   text-align: center;
   overflow-x: hidden;
   min-height: 100vh;
-  background: #ffeef5;
 }
 
-/* ── CANVAS ── */
+/* starfield canvas — only visible behind dark pages */
 canvas {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   z-index: -1;
   pointer-events: none;
-  background: transparent;
 }
 
-/* ── PAGE SYSTEM (IMPORTANT FIX) ── */
-.page {
-  display: none;
-  min-height: 100vh;
-  width: 100%;
-  position: relative;
+/* ── PAGE BASE ── */
+.page { display: none; min-height: 100vh; padding: 30px 20px; }
+.active { display: block; }
+
+/* pink pages override body bg */
+.pink-page {
+  background: #ffeef5;
+  color: #333;
 }
 
-.page.active {
-  display: block;
-}
-
-/* ── DARK PAGES (QUIZ + ONWARD) ── */
+/* dark pages use the canvas starfield */
 .dark-page {
   background: transparent;
   color: white;
-  min-height: 100vh;
 }
 
-/* ── QUIZ LAYOUT FIX ── */
+/* quiz/dark pages need flex centering */
 .quiz-page {
   display: none;
   min-height: 100vh;
-  width: 100%;
-  padding: 60px 20px;
+  padding: 60px 20px 40px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
-
-.quiz-page.active {
-  display: flex;
-}
+.quiz-page.active { display: flex; }
 
 /* ── BUTTONS ── */
-button {
-  padding: 12px 20px;
-  margin: 10px;
+.fancy-btn {
+  padding: 12px 28px;
+  margin: 10px 6px;
   border: none;
-  border-radius: 25px;
+  border-radius: 50px;
   background: linear-gradient(45deg, #ff4d6d, #ff99ac);
   color: white;
   font-size: 16px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255,80,120,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.fancy-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,80,120,0.6); }
+.fancy-btn:active { transform: scale(0.96); }
+
+/* pink page buttons (slightly different shadow on light bg) */
+.pink-btn {
+  box-shadow: 0 4px 15px rgba(255,80,120,0.35);
 }
 
-/* ── LOGIN FIX ── */
-.login-container {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-}
-
+/* ── LOGIN ── */
+.login-container { display: flex; min-height: 100vh; padding: 0; }
 .left, .right {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding: 20px;
+}
+.left img { width: 70%; max-width: 300px; border-radius: 16px; box-shadow: 0 4px 20px rgba(200,80,120,0.2); }
+
+.pin-title {
+  font-family: 'Pacifico', cursive;
+  color: #e75480;
+  font-size: 1.6rem;
+  margin-bottom: 16px;
 }
 
-/* ── PIN BOXES ── */
 #boxes span {
-  width: 28px;
-  height: 28px;
-  border: 2px solid #e75480;
-  display: inline-block;
+  width: 28px; height: 28px;
+  border: 2.5px solid #e75480;
+  border-radius: 6px;
   margin: 5px;
+  display: inline-block;
+  background: white;
+  transition: background 0.2s;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 64px);
+  gap: 10px;
+  margin-top: 14px;
+}
+.keypad button {
+  padding: 12px;
+  font-size: 17px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  background: white;
+  border: 2px solid #f7a8c4;
+  color: #c0395e;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.15s, transform 0.1s;
+}
+.keypad button:hover  { background: #ffe0ed; transform: none; box-shadow: none; }
+.keypad button:active { transform: scale(0.94); }
+
+#msg {
+  color: #c0395e;
+  font-size: 0.88rem;
+  margin-top: 12px;
+  font-weight: 600;
+  min-height: 20px;
+  max-width: 230px;
+  text-align: center;
 }
 
 /* ── BIRTHDAY PAGE ── */
 .bday-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   min-height: 100vh;
+  gap: 16px;
 }
+.confetti-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.8rem;
+  color: #e75480;
+  line-height: 1.4;
+}
+.name {
+  font-size: 3.6rem;
+  color: #c0395e;
+  display: block;
+  text-shadow: 2px 3px 0 #ffb3cd;
+}
+.subtitle { font-size: 1.2rem; color: #d4627e; font-weight: 600; }
 
-/* ── CANDLES PAGE (FIXED ALIGNMENT) ── */
+/* ── CANDLES PAGE ── */
 .candles-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  gap: 18px;
+  padding-top: 20px;
 }
-
-/* cake layout fix */
+.wish-title-pink {
+  font-family: 'Pacifico', cursive;
+  color: #e75480;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
 .cake-scene {
+  display: inline-block;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
+  padding-top: 58px;
+  margin-top: 10px;
 }
-
 .candles-above {
   position: absolute;
-  top: 0;
+  top: 0; left: 0;
   width: 100%;
   display: flex;
   justify-content: space-around;
+  padding: 0 16px;
+  align-items: flex-end;
 }
-
 .candle {
-  width: 13px;
-  height: 38px;
+  width: 13px; height: 38px;
+  border-radius: 4px;
   position: relative;
+  flex-shrink: 0;
 }
-
 .flame {
   position: absolute;
-  top: -16px;
-  left: 50%;
+  top: -16px; left: 50%;
   transform: translateX(-50%);
-  width: 9px;
-  height: 14px;
-  background: orange;
-  border-radius: 50%;
+  width: 9px; height: 14px;
+  background: radial-gradient(ellipse at bottom, #fff59d 0%, #ffb300 55%, #ff6f00 100%);
+  border-radius: 50% 50% 30% 30%;
+  box-shadow: 0 0 8px 3px rgba(255,180,0,0.9);
+  transition: opacity 0.4s ease;
 }
+.flame.out { opacity: 0; box-shadow: none; }
 
-.flame.out {
-  opacity: 0;
-}
-
-/* cake */
 .cake {
-  width: 280px;
-  height: 150px;
+  width: 280px; height: 150px;
   background: white;
   border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(200,80,120,0.2);
+  border: 2px solid #ffd6e7;
 }
-
-/* blow button safety */
-.blow-btn {
-  margin-top: 10px;
-  z-index: 5;
+.cake-dots { position: absolute; inset: 0; pointer-events: none; }
+.dot {
+  position: absolute;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
+.blow-btn { margin-top: 22px; font-size: 1.1rem; padding: 14px 40px; }
 
-/* ── CUT PAGE ── */
+/* ── CAKE CUT PAGE ── */
+.cut-page { position: relative; }
+
+/* knife is INSIDE .cut-area which is relative — so it won't bleed out */
 .cut-area {
   position: relative;
   width: 320px;
   height: 320px;
-  margin: auto;
+  margin: 0 auto;
 }
-
 #cakeImg {
   width: 280px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
   position: absolute;
-  top: 20px;
-  left: 50%;
+  top: 20px; left: 50%;
   transform: translateX(-50%);
 }
-
 #knife {
   width: 90px;
   position: absolute;
+  top: 10px; left: 10px;
   cursor: grab;
+  z-index: 10;
+}
+#yay {
+  font-family: 'Pacifico', cursive;
+  color: #e75480;
+  font-size: 2rem;
+  margin-top: 10px;
 }
 
 /* ── BALLOONS ── */
-#balloons {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 999;
-}
-
+#balloons { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 999; }
 .balloon {
   position: absolute;
-  bottom: -100px;
-  border-radius: 50%;
-  animation: floatUp 5s linear forwards;
+  bottom: -130px;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  animation: floatUp linear forwards;
 }
-
+.balloon::after {
+  content: "";
+  position: absolute;
+  bottom: -18px; left: 50%;
+  transform: translateX(-50%);
+  width: 1px; height: 18px;
+  background: #aaa;
+}
 @keyframes floatUp {
-  0% { bottom: -100px; }
-  100% { bottom: 110%; }
+  0%   { bottom: -130px; opacity: 1; }
+  85%  { opacity: 0.9; }
+  100% { bottom: 108%; opacity: 0; }
 }
 
-/* ── TEXT ── */
-h1 {
-  text-shadow: 0 0 15px #ff99cc;
+/* ── QUIZ / DARK PAGES ── */
+.quiz-page h1 {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.2rem;
+  color: #ff99cc;
+  text-shadow: 0 0 20px #ff4d6d;
+  margin-bottom: 20px;
+}
+.quiz-page p { font-size: 1.3rem; color: #ffd6e7; margin-bottom: 24px; max-width: 500px; }
+
+.result-text {
+  font-size: 1.2rem;
+  background: rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 20px 30px;
+  border: 1px solid rgba(255,150,200,0.3);
+  max-width: 400px;
+  margin: 0 auto 20px;
+  color: #ffd6e7;
+  line-height: 1.7;
+}
+
+.moon-img {
+  width: 240px;
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(255,255,255,0.3);
+  display: block;
+  margin: 10px auto;
+}
+
+iframe {
+  width: 90%; max-width: 560px; height: 220px;
+  border-radius: 15px; margin-top: 20px; border: none;
+}
+
+.msg-text {
+  font-size: 1.2rem;
+  background: rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 24px 32px;
+  border: 1px solid rgba(255,150,200,0.25);
+  max-width: 480px;
+  margin: 0 auto 20px;
+  color: #ffd6e7;
+  line-height: 1.8;
+}
+
+.poem {
+  max-width: 680px;
+  margin: 20px auto;
+  padding: 28px 32px;
+  text-align: left;
+  line-height: 1.9;
+  font-size: 1rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 18px;
+  box-shadow: 0 0 30px rgba(255,100,160,0.2);
+  border: 1px solid rgba(255,150,200,0.2);
+  white-space: pre-line;
+  color: #ffe0ed;
 }
