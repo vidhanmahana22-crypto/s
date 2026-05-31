@@ -1,277 +1,210 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday Surprise ❤️</title>
+<title>Birthday</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  text-align: center;
-  overflow-x: hidden;
-  background: radial-gradient(circle, #1a0033, #000);
-  color: white;
-}
-
-canvas {
-  position: fixed;
-  top:0;
-  left:0;
-  z-index:-1;
-}
-
-.page { display:none; padding:30px; }
-.active { display:block; }
-
-button {
-  padding:12px 20px;
-  margin:10px;
-  border:none;
-  border-radius:25px;
-  background: linear-gradient(45deg,#ff4d6d,#ff99ac);
+body{
+  margin:0;
+  background:black;
   color:white;
-  font-size:16px;
-  cursor:pointer;
+  font-family:Arial;
+  text-align:center;
 }
 
-h1 { text-shadow:0 0 15px #ff99cc; }
+.page{
+  display:none;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
 
-iframe {
-  width:90%;
-  height:220px;
-  border-radius:15px;
+.active{display:flex;}
+
+button{
+  padding:10px 20px;
   margin-top:20px;
-}
-
-.poem {
-  max-width:700px;
-  margin:40px auto;
-  padding:20px;
-  text-align:left;
-  line-height:1.7;
-  background: rgba(255,255,255,0.05);
-  border-radius:15px;
-  box-shadow:0 0 20px rgba(255,153,204,0.2);
-  white-space:pre-line;
-}
-
-.moon-img {
-  width: 250px;
-  border-radius: 20px;
-  box-shadow: 0 0 40px rgba(255,255,255,0.5);
-  margin-top: 20px;
+  cursor:pointer;
 }
 
 /* LOGIN */
-.login-container {
+.login-container{
   display:flex;
-  justify-content:center;
-  align-items:center;
   gap:40px;
-  flex-wrap:wrap;
+  align-items:center;
 }
-.login-left img {
-  width:250px;
+
+.login-left img{
+  width:200px;
   border-radius:20px;
 }
-.login-right input {
-  padding:12px;
-  font-size:18px;
-  text-align:center;
-  border-radius:10px;
-  border:none;
-  width:120px;
-}
-.hint { color:#ff99ac; }
 
-/* CAKE + KNIFE */
-.cake-area { position:relative; display:inline-block; }
-.cake { width:220px; transition:0.5s; }
-.knife {
-  position:absolute;
-  width:120px;
-  top:-50px;
-  left:50%;
-  transform:translateX(-50%);
+/* CAKE */
+.cake{
+  width:200px;
+  height:120px;
+  background:#ff69b4;
+  border-radius:10px;
+  position:relative;
   cursor:pointer;
-  transition:0.5s;
 }
-.slice { transform: translateY(40px) rotate(-10deg); }
+
+.cake::before{
+  content:"";
+  position:absolute;
+  top:-40px;
+  left:70px;
+  width:60px;
+  height:40px;
+  background:#fff;
+  border-radius:10px;
+}
+
+.cut{
+  background:#aaa !important;
+}
 
 /* BALLOONS */
-.balloon {
+.balloon{
   position:absolute;
   bottom:-100px;
-  width:40px;
-  height:50px;
+  width:30px;
+  height:40px;
   border-radius:50%;
-  animation: floatUp 5s linear infinite;
+  animation:float 5s linear infinite;
 }
-@keyframes floatUp {
-  from { transform:translateY(0); }
-  to { transform:translateY(-800px); }
+
+@keyframes float{
+  from{transform:translateY(0);}
+  to{transform:translateY(-120vh);}
 }
 
 /* CANDLES */
-.flame {
+.candle{
+  display:flex;
+  gap:20px;
+}
+
+.flame{
   width:10px;
   height:20px;
   background:orange;
   border-radius:50%;
-  margin:5px auto;
-  animation:flicker 0.2s infinite alternate;
 }
-@keyframes flicker {
-  from { transform:scale(1); }
-  to { transform:scale(1.2); }
-}
-.smoke {
-  width:8px;
-  height:20px;
+
+.off{
   background:gray;
-  border-radius:50%;
-  opacity:0;
-  margin:auto;
 }
+
+.hidden{display:none;}
 </style>
+
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
-
-<audio id="bgMusic" loop>
-  <source src="Apna-Bana-Le.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-let score = 0;
-let total = 10;
-
-function nextPage(n){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById("page"+n).classList.add("active");
-
-  let music = document.getElementById("bgMusic");
-  music.volume = 0.3;
-  music.play().catch(()=>{});
-
-  if(n===12) showResult();
-}
-
-/* PIN */
-function checkPin(){
-  let pin = document.getElementById("pinInput").value;
-  let hint = document.getElementById("hintText");
-
-  if(pin === "0502"){
-    nextPage(17);
-  }
-  else if(pin === "0306"){
-    hint.innerText = "The pin is not your birthdate Samu, try with birthdate of someone special who lives in Bangalore";
-  }
-  else{
-    hint.innerText = "Pin incorrect, try with birthdate of someone special who lives in Bangalore";
-  }
-}
-
-/* CAKE CUT */
-function cutCake(){
-  document.getElementById("cake").classList.add("slice");
-  document.getElementById("knife").style.top="100px";
-
-  for(let i=0;i<10;i++){
-    let b=document.createElement("div");
-    b.className="balloon";
-    b.style.left=Math.random()*90+"%";
-    b.style.background="hsl("+Math.random()*360+",70%,60%)";
-    document.body.appendChild(b);
-  }
-
-  document.getElementById("nextCake").style.display="block";
-}
-
-/* CANDLES */
-function blowCandles(){
-  document.querySelectorAll(".flame").forEach(f=>f.style.display="none");
-  document.querySelectorAll(".smoke").forEach(s=>{
-    s.style.opacity=1;
-    setTimeout(()=>s.style.opacity=0,2000);
-  });
-}
-
-function correct(){ score++; }
-function annoyingYes(){ alert("Wrong answer 😤 try again"); }
-
-function move(btn){
-  btn.style.position="absolute";
-  btn.style.left=Math.random()*80+"%";
-  btn.style.top=Math.random()*80+"%";
-}
-
-function showResult(){
-  let text="";
-  if(score >= 8) text="Elite performance 😎 clearly you know me too well";
-  else if(score >= 5) text="Good good 😏 acceptable effort";
-  else if(score >= 3) text="Hmm 🤨 something feels off";
-  else text="Very suspicious behavior 😤 investigation needed";
-
-  document.getElementById("result").innerHTML =
-    "Score: " + score + "/" + total + "<br><br>" + text;
-}
-</script>
-
 <!-- LOGIN -->
 <div id="page1" class="page active">
-<h1>🔐 प्रवेश</h1>
+<h1>Login 🔐</h1>
+
 <div class="login-container">
-  <div class="login-left">
-    <img src="image.jpeg">
-  </div>
-  <div class="login-right">
-    <p>Enter 4 digit PIN</p>
-    <input type="password" id="pinInput" maxlength="4"><br>
-    <button onclick="checkPin()">Enter</button>
-    <p id="hintText" class="hint"></p>
-  </div>
+<div class="login-left">
+<img src="image.jpeg">
+</div>
+
+<div>
+<p>Enter PIN</p>
+<input id="pin" maxlength="4"><br>
+<button onclick="checkPin()">Enter</button>
+<p id="hint"></p>
+</div>
 </div>
 </div>
 
 <!-- CAKE -->
-<div id="page17" class="page">
-<h1>🎂 Happy Birthday ❤️</h1>
-<div class="cake-area">
-<img src="https://i.imgur.com/9Yj3C8K.png" class="cake" id="cake">
-<img src="https://i.imgur.com/6X12K9P.png" class="knife" id="knife" onclick="cutCake()">
-</div>
-<button id="nextCake" style="display:none;" onclick="nextPage(18)">Next</button>
+<div id="page2" class="page">
+<h1>🎂 Happy Birthday Samu ❤️</h1>
+<p>Cut the cake</p>
+
+<div id="cake" class="cake" onclick="cutCake()"></div>
+
+<div id="balloons"></div>
+
+<button id="next1" class="hidden" onclick="nextPage(3)">Next</button>
 </div>
 
 <!-- CANDLES -->
-<div id="page18" class="page">
-<h1>After making a wish, blow the candles</h1>
+<div id="page3" class="page">
+<h1>Make a wish… then blow candles 🕯️</h1>
 
-<div>
-<div class="flame"></div><div class="smoke"></div>
-<div class="flame"></div><div class="smoke"></div>
-<div class="flame"></div><div class="smoke"></div>
+<div id="candles" class="candle">
+<div class="flame"></div>
+<div class="flame"></div>
+<div class="flame"></div>
 </div>
 
-<button onclick="blowCandles()">Blow</button>
+<button onclick="blow()">Blow</button>
 <br>
-<button onclick="nextPage(19)">Next</button>
+<button onclick="nextPage(4)">Next</button>
 </div>
 
 <!-- QUIZ INTRO -->
-<div id="page19" class="page">
-<h1>Lets take a test of how well you know me 😏</h1>
-<button onclick="nextPage(2)">Start Quiz</button>
+<div id="page4" class="page">
+<h1>Let’s take a test 😏</h1>
+<p>How well do you know me?</p>
+<button onclick="nextPage(5)">Start</button>
 </div>
 
-<!-- NOW YOUR ORIGINAL CODE CONTINUES FROM PAGE2 EXACTLY SAME -->
-<!-- (PASTE YOUR EXISTING PAGE2 TO PAGE16 HERE WITHOUT CHANGING ANYTHING) -->
+<!-- YOUR EXISTING CONTENT -->
+<div id="page5" class="page">
+<h1>Continue your existing pages here</h1>
+</div>
+
+<script>
+
+function nextPage(n){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page"+n).classList.add("active");
+}
+
+function checkPin(){
+  let val=document.getElementById("pin").value;
+  let hint=document.getElementById("hint");
+
+  if(val==="0502"){
+    nextPage(2);
+  }
+  else if(val==="0306"){
+    hint.innerText="The pin is not your birthdate Samu, try with birthdate of someone special who lives in Bangalore";
+  }
+  else{
+    hint.innerText="Pin incorrect, try with birthdate of someone special who lives in Bangalore";
+  }
+}
+
+function cutCake(){
+  document.getElementById("cake").classList.add("cut");
+
+  let container=document.getElementById("balloons");
+
+  for(let i=0;i<8;i++){
+    let b=document.createElement("div");
+    b.className="balloon";
+    b.style.left=Math.random()*100+"vw";
+    b.style.background=`hsl(${Math.random()*360},70%,60%)`;
+    container.appendChild(b);
+  }
+
+  document.getElementById("next1").classList.remove("hidden");
+}
+
+function blow(){
+  document.querySelectorAll(".flame").forEach(f=>f.classList.add("off"));
+}
+
+</script>
 
 </body>
 </html>
