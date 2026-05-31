@@ -20,10 +20,7 @@ body {
   display:flex;
   height:100vh;
 }
-.left {
-  flex:1;
-  background:#ffc0cb;
-}
+.left { flex:1; background:#ffc0cb; }
 .right {
   flex:1;
   display:flex;
@@ -32,16 +29,11 @@ body {
   align-items:center;
 }
 
-.pin-boxes {
-  display:flex;
-  gap:10px;
-  margin-bottom:20px;
-}
+.pin-boxes { display:flex; gap:10px; margin-bottom:20px; }
 .box {
   width:45px;
   height:55px;
   border:2px solid black;
-  font-size:24px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -59,14 +51,28 @@ body {
   cursor:pointer;
 }
 
-/* CAKE BASE */
+/* CAKE */
 .cake {
-  width:220px;
-  height:130px;
-  background:#8B4513;
+  width:240px;
+  height:140px;
+  background:white;
   margin:50px auto;
   position:relative;
-  border-radius:10px;
+  border-radius:12px;
+  box-shadow:0 0 10px #ccc inset;
+}
+
+/* cake decoration */
+.cake::after {
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:
+    radial-gradient(circle at 20% 30%, pink 6px, transparent 7px),
+    radial-gradient(circle at 50% 60%, red 6px, transparent 7px),
+    radial-gradient(circle at 80% 40%, pink 6px, transparent 7px),
+    radial-gradient(circle at 30% 80%, red 6px, transparent 7px);
 }
 
 /* CANDLES */
@@ -78,9 +84,11 @@ body {
   border-radius:3px;
 }
 
-.red { background:#ff4d4d; }
-.blue { background:#4da6ff; }
-.yellow { background:#ffd11a; }
+.c1 { background:#ff4d4d; }
+.c2 { background:#4da6ff; }
+.c3 { background:#ffd11a; }
+.c4 { background:#66ff66; }
+.c5 { background:#ff66cc; }
 
 .flame {
   width:10px;
@@ -104,7 +112,6 @@ body {
 .balloon {
   width:40px;
   height:50px;
-  background:red;
   border-radius:50%;
   position:absolute;
   bottom:-60px;
@@ -120,76 +127,77 @@ body {
 
 <!-- LOGIN -->
 <div id="login" class="page active">
-  <div class="login-container">
-    <div class="left"></div>
-    <div class="right">
+<div class="login-container">
+<div class="left"></div>
+<div class="right">
 
-      <div class="pin-boxes">
-        <div class="box" id="b0"></div>
-        <div class="box" id="b1"></div>
-        <div class="box" id="b2"></div>
-        <div class="box" id="b3"></div>
-      </div>
+<div class="pin-boxes">
+<div class="box" id="b0"></div>
+<div class="box" id="b1"></div>
+<div class="box" id="b2"></div>
+<div class="box" id="b3"></div>
+</div>
 
-      <div class="keypad">
-        <div class="key" onclick="press(1)">1</div>
-        <div class="key" onclick="press(2)">2</div>
-        <div class="key" onclick="press(3)">3</div>
-        <div class="key" onclick="press(4)">4</div>
-        <div class="key" onclick="press(5)">5</div>
-        <div class="key" onclick="press(6)">6</div>
-        <div class="key" onclick="press(7)">7</div>
-        <div class="key" onclick="press(8)">8</div>
-        <div class="key" onclick="press(9)">9</div>
-        <div class="key" onclick="clearPin()">C</div>
-        <div class="key" onclick="press(0)">0</div>
-        <div class="key" onclick="submitPin()">OK</div>
-      </div>
+<div class="keypad">
+<div class="key" onclick="press(1)">1</div>
+<div class="key" onclick="press(2)">2</div>
+<div class="key" onclick="press(3)">3</div>
+<div class="key" onclick="press(4)">4</div>
+<div class="key" onclick="press(5)">5</div>
+<div class="key" onclick="press(6)">6</div>
+<div class="key" onclick="press(7)">7</div>
+<div class="key" onclick="press(8)">8</div>
+<div class="key" onclick="press(9)">9</div>
+<div class="key" onclick="clearPin()">C</div>
+<div class="key" onclick="press(0)">0</div>
+<div class="key" onclick="submitPin()">OK</div>
+</div>
 
-      <p id="hint"></p>
+<p id="hint"></p>
 
-    </div>
-  </div>
+</div>
+</div>
 </div>
 
 <!-- BIRTHDAY -->
 <div id="birthday" class="page">
-  <h1>Happy Birthday Samu 🎉</h1>
-  <p>I made something for you ❤️</p>
-  <button onclick="next('candles')">Next</button>
+<h1>Happy Birthday Samu 🎉</h1>
+<p>I made something for you ❤️</p>
+<button onclick="next('candles')">Next</button>
 </div>
 
 <!-- CANDLES -->
 <div id="candles" class="page">
-  <h2>Make a wish & blow candles ✨</h2>
+<h2>Make a wish & blow candles ✨</h2>
 
-  <div class="cake">
-    <div class="candle red" style="left:50px"><div class="flame"></div></div>
-    <div class="candle blue" style="left:100px"><div class="flame"></div></div>
-    <div class="candle yellow" style="left:150px"><div class="flame"></div></div>
-  </div>
+<div class="cake">
+<div class="candle c1" style="left:20px"><div class="flame"></div></div>
+<div class="candle c2" style="left:60px"><div class="flame"></div></div>
+<div class="candle c3" style="left:100px"><div class="flame"></div></div>
+<div class="candle c4" style="left:140px"><div class="flame"></div></div>
+<div class="candle c5" style="left:180px"><div class="flame"></div></div>
+</div>
 
-  <button onclick="blow()">Blow</button>
+<button onclick="blow()">Blow</button>
 </div>
 
 <!-- CAKE CUT -->
 <div id="cut" class="page">
-  <h2>Cut the cake 🎂</h2>
+<h2>Cut the cake 🎂</h2>
 
-  <img src="cake.jpeg" id="cakeImg" width="320">
+<img src="cake.jpeg" id="cakeImg" width="320">
 
-  <br><br>
+<br><br>
 
-  <img src="knife.jpeg" id="knife">
+<img src="knife.jpeg" id="knife">
 
-  <h3 id="yay" style="display:none;">Yay 🎉</h3>
-
-  <button id="nextBtn" style="display:none;" onclick="next('balloons')">Next</button>
+<h3 id="yay" style="display:none;">Yay 🎉</h3>
+<button id="nextBtn" style="display:none;" onclick="next('quiz')">Next</button>
 </div>
 
-<!-- BALLOONS -->
-<div id="balloons" class="page">
-  <h2>Yay 🎈🎈🎈</h2>
+<!-- QUIZ -->
+<div id="quiz" class="page">
+<h2>Let’s test how well you know me 😉</h2>
 </div>
 
 <script>
@@ -231,39 +239,47 @@ function blow(){
   setTimeout(()=>next("cut"),1000);
 }
 
-/* CAKE CUT SIMPLE */
+/* CUT LOGIC */
 let knife = document.getElementById("knife");
 let cake = document.getElementById("cakeImg");
+let isDragging=false;
 
-let isDragging = false;
+knife.onmousedown=()=>isDragging=true;
+document.onmouseup=()=>isDragging=false;
 
-knife.onmousedown = () => isDragging = true;
-document.onmouseup = () => isDragging = false;
+document.onmousemove=(e)=>{
+if(isDragging){
+knife.style.left=e.pageX-40+"px";
+knife.style.top=e.pageY-20+"px";
 
-document.onmousemove = (e) => {
-  if(isDragging){
-    knife.style.left = e.pageX - 40 + "px";
-    knife.style.top = e.pageY - 20 + "px";
+let c=cake.getBoundingClientRect();
+let k=knife.getBoundingClientRect();
 
-    let c = cake.getBoundingClientRect();
-    let k = knife.getBoundingClientRect();
-
-    if(
-      k.left < c.right &&
-      k.right > c.left &&
-      k.top < c.bottom &&
-      k.bottom > c.top
-    ){
-      cutCake();
-    }
-  }
+if(k.left<c.right && k.right>c.left && k.top<c.bottom && k.bottom>c.top){
+cutCake();
+}
+}
 }
 
 function cutCake(){
-  document.getElementById("cakeImg").src = "cake_cut.jpeg";
-  document.getElementById("yay").style.display = "block";
-  document.getElementById("nextBtn").style.display = "inline-block";
-  isDragging = false;
+document.getElementById("cakeImg").src="cake_cut.jpeg";
+document.getElementById("yay").style.display="block";
+document.getElementById("nextBtn").style.display="inline-block";
+
+releaseBalloons();
+
+isDragging=false;
+}
+
+/* AUTO BALLOONS */
+function releaseBalloons(){
+for(let i=0;i<12;i++){
+let b=document.createElement("div");
+b.className="balloon";
+b.style.left=Math.random()*window.innerWidth+"px";
+b.style.background=["red","blue","yellow","green","pink"][Math.floor(Math.random()*5)];
+document.body.appendChild(b);
+}
 }
 </script>
 
