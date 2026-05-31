@@ -75,7 +75,20 @@ canvas {
   flex-direction: column;
   padding: 20px;
 }
-.left img { width: 70%; max-width: 300px; border-radius: 16px; box-shadow: 0 4px 20px rgba(200,80,120,0.2); }
+.left {
+  padding: 0;
+  overflow: hidden;
+}
+
+.left img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+  max-width: none;
+  box-shadow: none;
+}
 
 .pin-title {
   font-family: 'Pacifico', cursive;
@@ -331,4 +344,34 @@ iframe {
   border: 1px solid rgba(255,150,200,0.2);
   white-space: pre-line;
   color: #ffe0ed;
+}
+
+@media (max-width: 768px) {
+
+  .login-container {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .left {
+    height: 45vh;
+    width: 100%;
+    padding: 0;
+    flex: none;
+  }
+
+  .left img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .right {
+    height: 55vh;
+    width: 100%;
+    flex: none;
+    justify-content: flex-start;
+    padding-top: 20px;
+  }
+
 }
