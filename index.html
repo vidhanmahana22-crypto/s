@@ -9,11 +9,12 @@
 </head>
 <body>
 
+<!-- dark starfield only for quiz+ pages -->
 <canvas id="bg"></canvas>
 <audio id="bgMusic" loop><source src="Apna-Bana-Le.mp3" type="audio/mpeg"></audio>
 
-<!-- PAGE 1: LOGIN -->
-<div id="loginPage" class="page active">
+<!-- PAGE 1: LOGIN (pink bg) -->
+<div id="loginPage" class="page pink-page active">
   <div class="login-container">
     <div class="left"><img src="image.jpeg"></div>
     <div class="right">
@@ -40,18 +41,18 @@
   </div>
 </div>
 
-<!-- PAGE 2: BIRTHDAY LANDING -->
-<div id="birthday" class="page">
+<!-- PAGE 2: BIRTHDAY (pink bg) -->
+<div id="birthday" class="page pink-page">
   <div class="bday-container">
     <div class="confetti-title">🎉 Happy Birthday<br><span class="name">Samu</span></div>
     <p class="subtitle">I made something special just for you ✨</p>
-    <button class="fancy-btn" onclick="go('candles')">Start 🎂</button>
+    <button class="fancy-btn pink-btn" onclick="go('candles')">Start 🎂</button>
   </div>
 </div>
 
-<!-- PAGE 3: CANDLES -->
-<div id="candles" class="page candles-page">
-  <h2 class="wish-title">Make a wish ✨</h2>
+<!-- PAGE 3: CANDLES (pink bg) -->
+<div id="candles" class="page pink-page candles-page">
+  <h2 class="wish-title-pink">Make a wish ✨</h2>
   <div class="cake-scene">
     <div class="candles-above">
       <div class="candle" style="background:red">  <div class="flame"></div></div>
@@ -64,51 +65,53 @@
       <div class="cake-dots" id="cakeDots"></div>
     </div>
   </div>
-  <button class="fancy-btn blow-btn" onclick="blow()">🌬️ Blow</button>
+  <button class="fancy-btn pink-btn blow-btn" onclick="blow()">🌬️ Blow</button>
 </div>
 
-<!-- PAGE 4: CAKE CUT -->
-<div id="cut" class="page">
-  <h2 class="wish-title">Cut the cake 🎂</h2>
-  <img id="cakeImg" src="cake.jpeg">
-  <img id="knife" src="knife.jpeg">
+<!-- PAGE 4: CAKE CUT (pink bg) -->
+<div id="cut" class="page pink-page cut-page">
+  <h2 class="wish-title-pink">Cut the cake 🎂</h2>
+  <div class="cut-area">
+    <img id="cakeImg" src="cake.jpeg">
+    <img id="knife" src="knife.jpeg">
+  </div>
   <h3 id="yay" style="display:none;">Yay 🎉</h3>
-  <button id="nextBtn" class="fancy-btn" style="display:none;" onclick="go('quiz')">Next ➡️</button>
+  <button id="nextBtn" class="fancy-btn pink-btn" style="display:none;" onclick="go('quiz')">Next ➡️</button>
   <div id="balloons"></div>
 </div>
 
-<!-- PAGE 5: QUIZ INTRO -->
-<div id="quiz" class="page quiz-page">
-  <h1>Let's see how well you know me 😉</h1>
+<!-- PAGE 5: QUIZ INTRO (dark bg) -->
+<div id="quiz" class="page dark-page quiz-page">
+  <h1>Let's see how well<br>you know me 😉</h1>
   <button class="fancy-btn" onclick="startQuiz()">Start Quiz 🎯</button>
 </div>
 
-<!-- QUIZ Q1 -->
-<div id="q1" class="page quiz-page">
+<!-- Q1 -->
+<div id="q1" class="page dark-page quiz-page">
   <h1>😂 Q1</h1>
   <p>Am I annoying?</p>
   <button class="fancy-btn" onclick="annoyingYes()">Yes 😅</button>
   <button class="fancy-btn" onclick="correct(); go('q2')">No 😇</button>
 </div>
 
-<!-- QUIZ Q2 -->
-<div id="q2" class="page quiz-page">
+<!-- Q2 -->
+<div id="q2" class="page dark-page quiz-page">
   <h1>😏 Q2</h1>
   <p>Your favorite person?</p>
   <button class="fancy-btn" onclick="correct(); go('q3')">Me 😎</button>
   <button class="fancy-btn" onclick="correct(); go('q3')">Still me 😂</button>
 </div>
 
-<!-- QUIZ Q3 -->
-<div id="q3" class="page quiz-page">
+<!-- Q3 -->
+<div id="q3" class="page dark-page quiz-page">
   <h1>🤭 Q3</h1>
   <p>Will you miss me?</p>
   <button class="fancy-btn" onclick="correct(); go('q4')">Yes 🥺</button>
   <button class="fancy-btn" onclick="move(this)">No 😒</button>
 </div>
 
-<!-- QUIZ Q4 -->
-<div id="q4" class="page quiz-page">
+<!-- Q4 -->
+<div id="q4" class="page dark-page quiz-page">
   <h1>🎬 Q4</h1>
   <p>Best movie we watched?</p>
   <button class="fancy-btn" onclick="correct(); go('q5')">Aanand ❤️</button>
@@ -116,48 +119,48 @@
   <button class="fancy-btn" onclick="go('q5')">Mahavatar Narasimha 🔥</button>
 </div>
 
-<!-- QUIZ Q5 -->
-<div id="q5" class="page quiz-page">
+<!-- Q5 -->
+<div id="q5" class="page dark-page quiz-page">
   <h1>💃 Q5</h1>
   <p>Dance or Sleep?</p>
   <button class="fancy-btn" onclick="correct(); go('q6')">Dance 💃</button>
   <button class="fancy-btn" onclick="go('q6')">Sleep 😴</button>
 </div>
 
-<!-- QUIZ Q6 -->
-<div id="q6" class="page quiz-page">
+<!-- Q6 -->
+<div id="q6" class="page dark-page quiz-page">
   <h1>😏 Q6</h1>
   <p>Who understands you better?</p>
   <button class="fancy-btn" onclick="correct(); go('q7')">Me 😎</button>
   <button class="fancy-btn" onclick="move(this)">No one 😶</button>
 </div>
 
-<!-- QUIZ Q7 -->
-<div id="q7" class="page quiz-page">
+<!-- Q7 -->
+<div id="q7" class="page dark-page quiz-page">
   <h1>😌 Q7</h1>
   <p>Who makes your day better?</p>
   <button class="fancy-btn" onclick="correct(); go('q8')">Me 😎</button>
   <button class="fancy-btn" onclick="go('q8')">Food 🍕</button>
 </div>
 
-<!-- QUIZ Q8 -->
-<div id="q8" class="page quiz-page">
+<!-- Q8 -->
+<div id="q8" class="page dark-page quiz-page">
   <h1>🧭 Q8</h1>
   <p>Who has better sense of direction?</p>
   <button class="fancy-btn" onclick="correct(); go('q9')">Me 😎</button>
   <button class="fancy-btn" onclick="go('q9')">Google Maps 🗺️</button>
 </div>
 
-<!-- QUIZ Q9 -->
-<div id="q9" class="page quiz-page">
+<!-- Q9 -->
+<div id="q9" class="page dark-page quiz-page">
   <h1>😂 Q9</h1>
   <p>Who is more dramatic?</p>
   <button class="fancy-btn" onclick="go('q10')">Amias 😆</button>
   <button class="fancy-btn" onclick="correct(); go('q10')">Farishta 😇</button>
 </div>
 
-<!-- QUIZ Q10 -->
-<div id="q10" class="page quiz-page">
+<!-- Q10 -->
+<div id="q10" class="page dark-page quiz-page">
   <h1>😏 Q10</h1>
   <p>Who gives best suggestions?</p>
   <button class="fancy-btn" onclick="correct(); showResult()">Me 😎</button>
@@ -165,14 +168,14 @@
 </div>
 
 <!-- RESULT -->
-<div id="result-page" class="page quiz-page">
+<div id="result-page" class="page dark-page quiz-page">
   <h1>📊 Your Report Card</h1>
   <p id="result-text" class="result-text"></p>
   <button class="fancy-btn" onclick="go('moon')">Next ➡️</button>
 </div>
 
-<!-- MOON PAGE -->
-<div id="moon" class="page quiz-page">
+<!-- MOON -->
+<div id="moon" class="page dark-page quiz-page">
   <h1>🌙 Moon Comparison</h1>
   <h3>Moon before 3 June 2002</h3>
   <img src="realImage.jpg" class="moon-img">
@@ -182,17 +185,17 @@
   <button class="fancy-btn" onclick="go('feel')">Next ➡️</button>
 </div>
 
-<!-- FEEL LOW PAGE -->
-<div id="feel" class="page quiz-page">
+<!-- FEEL LOW -->
+<div id="feel" class="page dark-page quiz-page">
   <h1>💙 For when you feel low</h1>
-  <p>Whenever you're sad... just pause and listen to one of your favourite songs 🌸<br>(or call me 🤗)</p>
+  <p>Whenever you're sad... just pause and listen 🌸<br>(or call me 🤗)</p>
   <iframe src="https://www.youtube.com/embed/asUDUqgC2V8" allow="autoplay"></iframe>
   <br><br>
   <button class="fancy-btn" onclick="go('message')">Next ➡️</button>
 </div>
 
-<!-- MESSAGE PAGE -->
-<div id="message" class="page quiz-page">
+<!-- MESSAGE -->
+<div id="message" class="page dark-page quiz-page">
   <h1>💜 A Small Message</h1>
   <p class="msg-text">
     You are genuinely someone very special ✨<br><br>
@@ -202,8 +205,8 @@
   <button class="fancy-btn" onclick="go('poem')">Here's your gift 🎁</button>
 </div>
 
-<!-- POEM PAGE -->
-<div id="poem" class="page quiz-page">
+<!-- POEM -->
+<div id="poem" class="page dark-page quiz-page">
   <h1>💌 Here's a poem for you</h1>
   <div class="poem">Mai aur meri tanhai aksar yeah baate karte hai
 
