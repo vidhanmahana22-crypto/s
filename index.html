@@ -1,287 +1,87 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Birthday</title>
-
-<style>
-body {
-  margin:0;
-  font-family:Arial;
-  background:#ffeef5;
-  text-align:center;
-}
-
-.page { display:none; padding:20px; }
-.active { display:block; }
-
-/* LOGIN */
-.login-container {
-  display:flex;
-  height:100vh;
-}
-.left { flex:1; background:#ffc0cb; }
-.right {
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
-
-.pin-boxes { display:flex; gap:10px; margin-bottom:20px; }
-.box {
-  width:45px;
-  height:55px;
-  border:2px solid black;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.keypad {
-  display:grid;
-  grid-template-columns:repeat(3,60px);
-  gap:10px;
-}
-.key {
-  padding:15px;
-  background:white;
-  border:1px solid black;
-  cursor:pointer;
-}
-
-/* CAKE */
-.cake {
-  width:240px;
-  height:140px;
-  background:white;
-  margin:50px auto;
-  position:relative;
-  border-radius:12px;
-  box-shadow:0 0 10px #ccc inset;
-}
-
-/* cake decoration */
-.cake::after {
-  content:"";
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:
-    radial-gradient(circle at 20% 30%, pink 6px, transparent 7px),
-    radial-gradient(circle at 50% 60%, red 6px, transparent 7px),
-    radial-gradient(circle at 80% 40%, pink 6px, transparent 7px),
-    radial-gradient(circle at 30% 80%, red 6px, transparent 7px);
-}
-
-/* CANDLES */
-.candle {
-  width:12px;
-  height:40px;
-  position:absolute;
-  top:-40px;
-  border-radius:3px;
-}
-
-.c1 { background:#ff4d4d; }
-.c2 { background:#4da6ff; }
-.c3 { background:#ffd11a; }
-.c4 { background:#66ff66; }
-.c5 { background:#ff66cc; }
-
-.flame {
-  width:10px;
-  height:14px;
-  background:orange;
-  border-radius:50%;
-  margin:auto;
-  box-shadow:0 0 10px yellow;
-}
-
-/* KNIFE */
-#knife {
-  width:90px;
-  position:absolute;
-  left:100px;
-  top:350px;
-  cursor:grab;
-}
-
-/* BALLOONS */
-.balloon {
-  width:40px;
-  height:50px;
-  border-radius:50%;
-  position:absolute;
-  bottom:-60px;
-  animation:float 5s linear forwards;
-}
-@keyframes float {
-  to { transform:translateY(-800px); }
-}
-</style>
+  <title>Birthday Surprise</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <!-- LOGIN -->
-<div id="login" class="page active">
-<div class="login-container">
-<div class="left"></div>
-<div class="right">
+<div id="loginPage" class="page active">
+  <div class="login-container">
 
-<div class="pin-boxes">
-<div class="box" id="b0"></div>
-<div class="box" id="b1"></div>
-<div class="box" id="b2"></div>
-<div class="box" id="b3"></div>
-</div>
+    <div class="left">
+      <img src="image.jpeg">
+    </div>
 
-<div class="keypad">
-<div class="key" onclick="press(1)">1</div>
-<div class="key" onclick="press(2)">2</div>
-<div class="key" onclick="press(3)">3</div>
-<div class="key" onclick="press(4)">4</div>
-<div class="key" onclick="press(5)">5</div>
-<div class="key" onclick="press(6)">6</div>
-<div class="key" onclick="press(7)">7</div>
-<div class="key" onclick="press(8)">8</div>
-<div class="key" onclick="press(9)">9</div>
-<div class="key" onclick="clearPin()">C</div>
-<div class="key" onclick="press(0)">0</div>
-<div class="key" onclick="submitPin()">OK</div>
-</div>
+    <div class="right">
+      <h2>Login</h2>
 
-<p id="hint"></p>
+      <div id="boxes">
+        <span></span><span></span><span></span><span></span>
+      </div>
 
-</div>
-</div>
+      <div class="keypad">
+        <button onclick="press(1)">1</button>
+        <button onclick="press(2)">2</button>
+        <button onclick="press(3)">3</button>
+        <button onclick="press(4)">4</button>
+        <button onclick="press(5)">5</button>
+        <button onclick="press(6)">6</button>
+        <button onclick="press(7)">7</button>
+        <button onclick="press(8)">8</button>
+        <button onclick="press(9)">9</button>
+        <button onclick="clearPin()">C</button>
+        <button onclick="press(0)">0</button>
+        <button onclick="checkPin()">OK</button>
+      </div>
+
+      <p id="msg"></p>
+    </div>
+
+  </div>
 </div>
 
 <!-- BIRTHDAY -->
 <div id="birthday" class="page">
-<h1>Happy Birthday Samu 🎉</h1>
-<p>I made something for you ❤️</p>
-<button onclick="next('candles')">Next</button>
+  <h1>🎉 Happy Birthday Samu</h1>
+  <button onclick="go('candles')">Start 🎂</button>
 </div>
 
 <!-- CANDLES -->
 <div id="candles" class="page">
-<h2>Make a wish & blow candles ✨</h2>
+  <h2>Make a wish ✨</h2>
 
-<div class="cake">
-<div class="candle c1" style="left:20px"><div class="flame"></div></div>
-<div class="candle c2" style="left:60px"><div class="flame"></div></div>
-<div class="candle c3" style="left:100px"><div class="flame"></div></div>
-<div class="candle c4" style="left:140px"><div class="flame"></div></div>
-<div class="candle c5" style="left:180px"><div class="flame"></div></div>
-</div>
+  <div class="cake">
+    <div class="candles">
+      <div class="candle"></div>
+      <div class="candle"></div>
+      <div class="candle"></div>
+      <div class="candle"></div>
+      <div class="candle"></div>
+    </div>
+  </div>
 
-<button onclick="blow()">Blow</button>
+  <button onclick="blow()">Blow</button>
 </div>
 
 <!-- CAKE CUT -->
 <div id="cut" class="page">
-<h2>Cut the cake 🎂</h2>
+  <h2>Cut the cake 🎂</h2>
 
-<img src="cake.jpeg" id="cakeImg" width="320">
+  <img id="cakeImg" src="cake.jpeg">
 
-<br><br>
+  <img id="knife" src="knife.jpeg">
 
-<img src="knife.jpeg" id="knife">
-
-<h3 id="yay" style="display:none;">Yay 🎉</h3>
-<button id="nextBtn" style="display:none;" onclick="next('quiz')">Next</button>
+  <h3 id="yay" style="display:none;">Yay 🎉</h3>
+  <button id="nextBtn" style="display:none;" onclick="go('quiz')">Next</button>
 </div>
 
 <!-- QUIZ -->
 <div id="quiz" class="page">
-<h2>Let’s test how well you know me 😉</h2>
+  <h2>Let’s see how well you know me 😉</h2>
 </div>
 
-<script>
-let pin="";
-
-function press(num){
-  if(pin.length<4){
-    pin+=num;
-    document.getElementById("b"+(pin.length-1)).innerText="*";
-  }
-}
-
-function clearPin(){
-  pin="";
-  for(let i=0;i<4;i++) document.getElementById("b"+i).innerText="";
-}
-
-function submitPin(){
-  if(pin==="0502"){
-    next("birthday");
-  } else if(pin==="0306"){
-    document.getElementById("hint").innerText=
-    "Not your birthdate Samu 😉 Try someone special from Bangalore ❤️";
-    clearPin();
-  } else {
-    document.getElementById("hint").innerText=
-    "Incorrect pin… try birthdate of someone special from Bangalore ❤️";
-    clearPin();
-  }
-}
-
-function next(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-function blow(){
-  document.querySelectorAll(".flame").forEach(f=>f.style.display="none");
-  setTimeout(()=>next("cut"),1000);
-}
-
-/* CUT LOGIC */
-let knife = document.getElementById("knife");
-let cake = document.getElementById("cakeImg");
-let isDragging=false;
-
-knife.onmousedown=()=>isDragging=true;
-document.onmouseup=()=>isDragging=false;
-
-document.onmousemove=(e)=>{
-if(isDragging){
-knife.style.left=e.pageX-40+"px";
-knife.style.top=e.pageY-20+"px";
-
-let c=cake.getBoundingClientRect();
-let k=knife.getBoundingClientRect();
-
-if(k.left<c.right && k.right>c.left && k.top<c.bottom && k.bottom>c.top){
-cutCake();
-}
-}
-}
-
-function cutCake(){
-document.getElementById("cakeImg").src="cake_cut.jpeg";
-document.getElementById("yay").style.display="block";
-document.getElementById("nextBtn").style.display="inline-block";
-
-releaseBalloons();
-
-isDragging=false;
-}
-
-/* AUTO BALLOONS */
-function releaseBalloons(){
-for(let i=0;i<12;i++){
-let b=document.createElement("div");
-b.className="balloon";
-b.style.left=Math.random()*window.innerWidth+"px";
-b.style.background=["red","blue","yellow","green","pink"][Math.floor(Math.random()*5)];
-document.body.appendChild(b);
-}
-}
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
