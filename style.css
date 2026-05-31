@@ -186,7 +186,8 @@ canvas {
 }
 .candles-above {
   position: absolute;
-  top: 0; left: 0;
+  top: 25px;
+  left: 0;
   width: 100%;
   display: flex;
   justify-content: space-around;
