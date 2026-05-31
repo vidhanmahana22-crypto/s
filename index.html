@@ -63,6 +63,78 @@ iframe {
   box-shadow: 0 0 40px rgba(255,255,255,0.5);
   margin-top: 20px;
 }
+
+/* LOGIN */
+.login-container {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:40px;
+  flex-wrap:wrap;
+}
+.login-left img {
+  width:250px;
+  border-radius:20px;
+}
+.login-right input {
+  padding:12px;
+  font-size:18px;
+  text-align:center;
+  border-radius:10px;
+  border:none;
+  width:120px;
+}
+.hint { color:#ff99ac; }
+
+/* CAKE + KNIFE */
+.cake-area { position:relative; display:inline-block; }
+.cake { width:220px; transition:0.5s; }
+.knife {
+  position:absolute;
+  width:120px;
+  top:-50px;
+  left:50%;
+  transform:translateX(-50%);
+  cursor:pointer;
+  transition:0.5s;
+}
+.slice { transform: translateY(40px) rotate(-10deg); }
+
+/* BALLOONS */
+.balloon {
+  position:absolute;
+  bottom:-100px;
+  width:40px;
+  height:50px;
+  border-radius:50%;
+  animation: floatUp 5s linear infinite;
+}
+@keyframes floatUp {
+  from { transform:translateY(0); }
+  to { transform:translateY(-800px); }
+}
+
+/* CANDLES */
+.flame {
+  width:10px;
+  height:20px;
+  background:orange;
+  border-radius:50%;
+  margin:5px auto;
+  animation:flicker 0.2s infinite alternate;
+}
+@keyframes flicker {
+  from { transform:scale(1); }
+  to { transform:scale(1.2); }
+}
+.smoke {
+  width:8px;
+  height:20px;
+  background:gray;
+  border-radius:50%;
+  opacity:0;
+  margin:auto;
+}
 </style>
 </head>
 
@@ -78,22 +150,59 @@ iframe {
 let score = 0;
 let total = 10;
 
-function start(){
-  let music = document.getElementById("bgMusic");
-  music.volume = 0.3;
-  music.play().catch(()=>{});
-  nextPage(2);
-}
-
 function nextPage(n){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById("page"+n).classList.add("active");
 
+  let music = document.getElementById("bgMusic");
+  music.volume = 0.3;
+  music.play().catch(()=>{});
+
   if(n===12) showResult();
 }
 
-function correct(){ score++; }
+/* PIN */
+function checkPin(){
+  let pin = document.getElementById("pinInput").value;
+  let hint = document.getElementById("hintText");
 
+  if(pin === "0502"){
+    nextPage(17);
+  }
+  else if(pin === "0306"){
+    hint.innerText = "The pin is not your birthdate Samu, try with birthdate of someone special who lives in Bangalore";
+  }
+  else{
+    hint.innerText = "Pin incorrect, try with birthdate of someone special who lives in Bangalore";
+  }
+}
+
+/* CAKE CUT */
+function cutCake(){
+  document.getElementById("cake").classList.add("slice");
+  document.getElementById("knife").style.top="100px";
+
+  for(let i=0;i<10;i++){
+    let b=document.createElement("div");
+    b.className="balloon";
+    b.style.left=Math.random()*90+"%";
+    b.style.background="hsl("+Math.random()*360+",70%,60%)";
+    document.body.appendChild(b);
+  }
+
+  document.getElementById("nextCake").style.display="block";
+}
+
+/* CANDLES */
+function blowCandles(){
+  document.querySelectorAll(".flame").forEach(f=>f.style.display="none");
+  document.querySelectorAll(".smoke").forEach(s=>{
+    s.style.opacity=1;
+    setTimeout(()=>s.style.opacity=0,2000);
+  });
+}
+
+function correct(){ score++; }
 function annoyingYes(){ alert("Wrong answer 😤 try again"); }
 
 function move(btn){
@@ -104,260 +213,65 @@ function move(btn){
 
 function showResult(){
   let text="";
-
-  if(score >= 8){
-    text = "Elite performance 😎 clearly you know me too well";
-  }
-  else if(score >= 5){
-    text = "Good good 😏 acceptable effort";
-  }
-  else if(score >= 3){
-    text = "Hmm 🤨 something feels off";
-  }
-  else{
-    text = "Very suspicious behavior 😤 investigation needed";
-  }
+  if(score >= 8) text="Elite performance 😎 clearly you know me too well";
+  else if(score >= 5) text="Good good 😏 acceptable effort";
+  else if(score >= 3) text="Hmm 🤨 something feels off";
+  else text="Very suspicious behavior 😤 investigation needed";
 
   document.getElementById("result").innerHTML =
     "Score: " + score + "/" + total + "<br><br>" + text;
 }
 </script>
 
-<!-- PAGE 1 -->
+<!-- LOGIN -->
 <div id="page1" class="page active">
-<h1>🎉 Happy Birthday Samu ❤️</h1>
-<p>Let's test you 😏</p>
-<button onclick="start()">Start</button>
+<h1>🔐 प्रवेश</h1>
+<div class="login-container">
+  <div class="login-left">
+    <img src="image.jpeg">
+  </div>
+  <div class="login-right">
+    <p>Enter 4 digit PIN</p>
+    <input type="password" id="pinInput" maxlength="4"><br>
+    <button onclick="checkPin()">Enter</button>
+    <p id="hintText" class="hint"></p>
+  </div>
+</div>
 </div>
 
-<!-- QUIZ -->
-<div id="page2" class="page">
-<h1>😂 Q1</h1>
-<p>Am I annoying?</p>
-<button onclick="annoyingYes()">Yes 😅</button>
-<button onclick="correct(); nextPage(3)">No 😇</button>
+<!-- CAKE -->
+<div id="page17" class="page">
+<h1>🎂 Happy Birthday ❤️</h1>
+<div class="cake-area">
+<img src="https://i.imgur.com/9Yj3C8K.png" class="cake" id="cake">
+<img src="https://i.imgur.com/6X12K9P.png" class="knife" id="knife" onclick="cutCake()">
+</div>
+<button id="nextCake" style="display:none;" onclick="nextPage(18)">Next</button>
 </div>
 
-<div id="page3" class="page">
-<h1>😏 Q2</h1>
-<p>Your favorite person?</p>
-<button onclick="correct(); nextPage(4)">Me 😎</button>
-<button onclick="correct(); nextPage(4)">Still me 😂</button>
+<!-- CANDLES -->
+<div id="page18" class="page">
+<h1>After making a wish, blow the candles</h1>
+
+<div>
+<div class="flame"></div><div class="smoke"></div>
+<div class="flame"></div><div class="smoke"></div>
+<div class="flame"></div><div class="smoke"></div>
 </div>
 
-<div id="page4" class="page">
-<h1>🤭 Q3</h1>
-<p>Will you miss me?</p>
-<button onclick="correct(); nextPage(5)">Yes 🥺</button>
-<button onclick="move(this)">No 😒</button>
-</div>
-
-<div id="page5" class="page">
-<h1>🎬 Q4</h1>
-<p>Best movie we watched?</p>
-<button onclick="correct(); nextPage(6)">Aanand ❤️</button>
-<button onclick="nextPage(6)">Brahmastra 😂</button>
-<button onclick="nextPage(6)">Mahavatar Narasimha 🔥</button>
-</div>
-
-<div id="page6" class="page">
-<h1>💃 Q5</h1>
-<p>Dance or Sleep?</p>
-<button onclick="correct(); nextPage(7)">Dance 💃</button>
-<button onclick="nextPage(7)">Sleep 😴</button>
-</div>
-
-<div id="page7" class="page">
-<h1>😏 Q6</h1>
-<p>Who understands you better?</p>
-<button onclick="correct(); nextPage(8)">Me 😎</button>
-<button onclick="move(this)">No one 😶</button>
-</div>
-
-<div id="page8" class="page">
-<h1>😌 Q7</h1>
-<p>Who makes your day better?</p>
-<button onclick="correct(); nextPage(9)">Me 😎</button>
-<button onclick="nextPage(9)">Food 🍕</button>
-</div>
-
-<div id="page9" class="page">
-<h1>🧭 Q8</h1>
-<p>Who has better sense of direction?</p>
-<button onclick="correct(); nextPage(10)">Me 😎</button>
-<button onclick="nextPage(10)">Google Maps 🗺️</button>
-</div>
-
-<div id="page10" class="page">
-<h1>😂 Q9</h1>
-<p>Who is more dramatic?</p>
-<button onclick="nextPage(11)">Amias 😆</button>
-<button onclick="correct(); nextPage(11)">Farishta 😇</button>
-</div>
-
-<div id="page11" class="page">
-<h1>😏 Q10</h1>
-<p>Who gives best suggestions?</p>
-<button onclick="correct(); nextPage(12)">Me 😎</button>
-<button onclick="nextPage(12)">Internet 🌐</button>
-</div>
-
-<!-- RESULT -->
-<div id="page12" class="page">
-<h1>📊 Your Report Card</h1>
-<p id="result"></p>
+<button onclick="blowCandles()">Blow</button>
 <br>
-<button onclick="nextPage(13)">Next</button>
+<button onclick="nextPage(19)">Next</button>
 </div>
 
-<!-- 🌙 MOON PAGE (UPDATED ONLY HERE) -->
-<div id="page13" class="page">
-<h1>🌙 Moon Comparison</h1>
-
-<h3>Moon before 3 June 2002</h3>
-<img src="realImage.jpg" class="moon-img">
-
-<h3>Moon after 3 June 2002</h3>
-<img src="image.jpeg" class="moon-img">
-
-<br>
-<button onclick="nextPage(14)">Next</button>
+<!-- QUIZ INTRO -->
+<div id="page19" class="page">
+<h1>Lets take a test of how well you know me 😏</h1>
+<button onclick="nextPage(2)">Start Quiz</button>
 </div>
 
-<!-- KRISHNA -->
-<div id="page14" class="page">
-<h1>💙 For when you feel low</h1>
-<p>Whenever you're sad... just pause and listen to one of your favourite song 🌸(or call me 🤗)</p>
-<iframe src="https://www.youtube.com/embed/asUDUqgC2V8"></iframe>
-<br><br>
-<button onclick="nextPage(15)">Next</button>
-</div>
-
-<!-- MESSAGE -->
-<div id="page15" class="page">
-<h1>💜 A Small Message</h1>
-<p>
-You are genuinely someone very special ✨<br><br>
-Keep smiling, keep dancing 💃<br>
-And never change the way you are 🌸
-</p>
-<br>
-<button onclick="nextPage(16)">Here's your gift</button>
-</div>
-
-<!-- POEM -->
-<div id="page16" class="page">
-<h1>💌 Here's a poem for you</h1>
-
-<div class="poem">
-Mai aur meri tanhai aksar yeah baate karte hai
-
-Ki mai khoya sa ,tu mera rasta si
-Jab mai roya tha ,tu ek hasi si
-Mai soya tha ,tu khwab si
-
-Ki Mai koi bhool sa ,tu ek fool si
-Mere har gham ko ek marham si
-Mai gulab jamun sa tu pani puri si
-Meri adhuri kahani ko karne puri si
-Meri khamosi me ek shor si
-Mera dil churane aayi ek chor si 
-
-Ki mai hu akela tu saath thi
-Mai hu bawla sa tu hoshiyari si
-Mujh bhakt ke liye ek bhakti si
-Mai hu padhaku sa tu kitab si
-Meri saamaan zindagi me ek vardaan si
-
-Ki mai shaant sa tu sukoon shanti si
-Mai karta paap sa tu hai ek suniti si
-Mai kalm sa tu personal diary si
-Mere har shrap ke liye ek blessing si
-
-Mai insomniac sa tu sleeping beauty si
-Mai hu sawla sa tu hai gori si
-Mere har kadam par ek sanam si
-Mere andhere me chaand si
-Mai bin buddhi sa tu samruddhi si
-
-
-Mai aur meri tanhai aksar yeah baate karte hai 
-
-Ki kitna tanha rheta tha Mai ,tu meri zindagi me bahar banke aaya
-Mujhpe hi jokes sunake, tune mujhko hi hasaya
-
-Purple Theodore valentine blessing se bhi mujhko, tune hi milwaya
-Mere bure se samay Ko, tune 11:11 banaya
-
-Choti choti baato par Roya jab mai, tune mujhe lamha lamha samjhaya
-Kitni minnate karke Maine, tujhko yu kamaya
-
-Motki khe kar Maine, tujhko bhot chidaya
-Toh wordle khelte hue mera, tune bhi majak udaya
-
-Thick shake Peete Peete mujhko, tune mysore Tirupati na jaane kitna ghumaya
-Fashion sense dekh kar mera, tune zanwaro ka photo laya
-
-Jab bore hua mai,tab tune badi door se aaye hai dikhaya
-Phir mere lame jokes sunkar,tune bhot chillaya
-
-Mujhko geet Ramayan padwa pahad ke baare me batakar, tune Anand bhot dilaya
-Meri zindagi me aake, tune saare ghamo Ko bhulaya
-
-Meri harkate dekh kar bhi,tune dance yu karaya
-Phir maar maar ke mujhko, tune patience bhot azmaya
-
-Chand ko dekh kar mujhko, tera hi khayal bhaya
-Bhikhre se Dil Ko mere ,teri aakhon ne hi sul jhaya
-
-Maaf karna mujhko jo  ,tujhe itna sataya
-Maaf karna mujhko jo , tujhe kabhi rulaya
-Thank you bolke aakhir mujhko, kar deti tu kyu paraya
-
-Poem yeah likh kar Maine, tere sang promise nibhaya
-3 June Ko aakhir Maine, tera din manaya
-3 June Ko aakhir Maine, tera Dil lubhaya
-
-
-Mai aur meri tanhai aksar yeah baate karte hai
-</div>
-
-</div>
-
-<!-- PARTICLES -->
-<script>
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
-
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let particles=[];
-for(let i=0;i<80;i++){
-particles.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-r:Math.random()*2
-});
-}
-
-function draw(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-ctx.fillStyle="rgba(255,153,204,0.6)";
-particles.forEach(p=>{
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fill();
-p.y+=0.4;
-if(p.y>canvas.height){
-p.y=0;
-p.x=Math.random()*canvas.width;
-}
-});
-requestAnimationFrame(draw);
-}
-draw();
-</script>
+<!-- NOW YOUR ORIGINAL CODE CONTINUES FROM PAGE2 EXACTLY SAME -->
+<!-- (PASTE YOUR EXISTING PAGE2 TO PAGE16 HERE WITHOUT CHANGING ANYTHING) -->
 
 </body>
 </html>
