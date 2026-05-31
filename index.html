@@ -9,18 +9,14 @@
 <!-- LOGIN -->
 <div id="loginPage" class="page active">
   <div class="login-container">
-
     <div class="left">
       <img src="image.jpeg">
     </div>
-
     <div class="right">
       <h2>Login</h2>
-
       <div id="boxes">
         <span></span><span></span><span></span><span></span>
       </div>
-
       <div class="keypad">
         <button onclick="press(1)">1</button>
         <button onclick="press(2)">2</button>
@@ -35,10 +31,8 @@
         <button onclick="press(0)">0</button>
         <button onclick="checkPin()">OK</button>
       </div>
-
       <p id="msg"></p>
     </div>
-
   </div>
 </div>
 
@@ -51,35 +45,34 @@
 <!-- CANDLES -->
 <div id="candles" class="page">
   <h2>Make a wish ✨</h2>
-
   <div class="cake">
     <div class="candles">
-      <div class="candle"></div>
-      <div class="candle"></div>
-      <div class="candle"></div>
-      <div class="candle"></div>
-      <div class="candle"></div>
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
     </div>
+    <!-- Dots rendered via JS to stay inside cake -->
+    <div class="cake-dots" id="cakeDots"></div>
   </div>
-
   <button onclick="blow()">Blow</button>
 </div>
 
 <!-- CAKE CUT -->
 <div id="cut" class="page">
   <h2>Cut the cake 🎂</h2>
-
   <img id="cakeImg" src="cake.jpeg">
-
   <img id="knife" src="knife.jpeg">
-
   <h3 id="yay" style="display:none;">Yay 🎉</h3>
   <button id="nextBtn" style="display:none;" onclick="go('quiz')">Next</button>
+  <!-- Balloons container -->
+  <div id="balloons"></div>
 </div>
 
 <!-- QUIZ -->
 <div id="quiz" class="page">
-  <h2>Let’s see how well you know me 😉</h2>
+  <h2>Let's see how well you know me 😉</h2>
 </div>
 
 <script src="script.js"></script>
