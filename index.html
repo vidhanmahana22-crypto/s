@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Birthday Surprise</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Surprise ❤️</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- LOGIN -->
+<canvas id="bg"></canvas>
+<audio id="bgMusic" loop><source src="Apna-Bana-Le.mp3" type="audio/mpeg"></audio>
+
+<!-- PAGE 1: LOGIN -->
 <div id="loginPage" class="page active">
   <div class="login-container">
     <div class="left"><img src="image.jpeg"></div>
     <div class="right">
-      <h2>Enter PIN 🔐</h2>
+      <h2 class="pin-title">Enter PIN 🔐</h2>
       <div id="boxes">
         <span></span><span></span><span></span><span></span>
       </div>
@@ -35,20 +40,19 @@
   </div>
 </div>
 
-<!-- BIRTHDAY -->
+<!-- PAGE 2: BIRTHDAY LANDING -->
 <div id="birthday" class="page">
   <div class="bday-container">
-    <h1>🎉 Happy Birthday<br><span class="name">Samu</span></h1>
+    <div class="confetti-title">🎉 Happy Birthday<br><span class="name">Samu</span></div>
     <p class="subtitle">I made something special just for you ✨</p>
     <button class="fancy-btn" onclick="go('candles')">Start 🎂</button>
   </div>
 </div>
 
-<!-- CANDLES -->
-<div id="candles" class="page">
+<!-- PAGE 3: CANDLES -->
+<div id="candles" class="page candles-page">
   <h2 class="wish-title">Make a wish ✨</h2>
   <div class="cake-scene">
-    <!-- candles sit ABOVE cake, absolutely positioned -->
     <div class="candles-above">
       <div class="candle" style="background:red">  <div class="flame"></div></div>
       <div class="candle" style="background:blue"> <div class="flame"></div></div>
@@ -60,10 +64,10 @@
       <div class="cake-dots" id="cakeDots"></div>
     </div>
   </div>
-  <button class="fancy-btn" onclick="blow()">🌬️ Blow</button>
+  <button class="fancy-btn blow-btn" onclick="blow()">🌬️ Blow</button>
 </div>
 
-<!-- CAKE CUT -->
+<!-- PAGE 4: CAKE CUT -->
 <div id="cut" class="page">
   <h2 class="wish-title">Cut the cake 🎂</h2>
   <img id="cakeImg" src="cake.jpeg">
@@ -73,9 +77,204 @@
   <div id="balloons"></div>
 </div>
 
-<!-- QUIZ -->
-<div id="quiz" class="page">
-  <h2>Let's see how well you know me 😉</h2>
+<!-- PAGE 5: QUIZ INTRO -->
+<div id="quiz" class="page quiz-page">
+  <h1>Let's see how well you know me 😉</h1>
+  <button class="fancy-btn" onclick="startQuiz()">Start Quiz 🎯</button>
+</div>
+
+<!-- QUIZ Q1 -->
+<div id="q1" class="page quiz-page">
+  <h1>😂 Q1</h1>
+  <p>Am I annoying?</p>
+  <button class="fancy-btn" onclick="annoyingYes()">Yes 😅</button>
+  <button class="fancy-btn" onclick="correct(); go('q2')">No 😇</button>
+</div>
+
+<!-- QUIZ Q2 -->
+<div id="q2" class="page quiz-page">
+  <h1>😏 Q2</h1>
+  <p>Your favorite person?</p>
+  <button class="fancy-btn" onclick="correct(); go('q3')">Me 😎</button>
+  <button class="fancy-btn" onclick="correct(); go('q3')">Still me 😂</button>
+</div>
+
+<!-- QUIZ Q3 -->
+<div id="q3" class="page quiz-page">
+  <h1>🤭 Q3</h1>
+  <p>Will you miss me?</p>
+  <button class="fancy-btn" onclick="correct(); go('q4')">Yes 🥺</button>
+  <button class="fancy-btn" onclick="move(this)">No 😒</button>
+</div>
+
+<!-- QUIZ Q4 -->
+<div id="q4" class="page quiz-page">
+  <h1>🎬 Q4</h1>
+  <p>Best movie we watched?</p>
+  <button class="fancy-btn" onclick="correct(); go('q5')">Aanand ❤️</button>
+  <button class="fancy-btn" onclick="go('q5')">Brahmastra 😂</button>
+  <button class="fancy-btn" onclick="go('q5')">Mahavatar Narasimha 🔥</button>
+</div>
+
+<!-- QUIZ Q5 -->
+<div id="q5" class="page quiz-page">
+  <h1>💃 Q5</h1>
+  <p>Dance or Sleep?</p>
+  <button class="fancy-btn" onclick="correct(); go('q6')">Dance 💃</button>
+  <button class="fancy-btn" onclick="go('q6')">Sleep 😴</button>
+</div>
+
+<!-- QUIZ Q6 -->
+<div id="q6" class="page quiz-page">
+  <h1>😏 Q6</h1>
+  <p>Who understands you better?</p>
+  <button class="fancy-btn" onclick="correct(); go('q7')">Me 😎</button>
+  <button class="fancy-btn" onclick="move(this)">No one 😶</button>
+</div>
+
+<!-- QUIZ Q7 -->
+<div id="q7" class="page quiz-page">
+  <h1>😌 Q7</h1>
+  <p>Who makes your day better?</p>
+  <button class="fancy-btn" onclick="correct(); go('q8')">Me 😎</button>
+  <button class="fancy-btn" onclick="go('q8')">Food 🍕</button>
+</div>
+
+<!-- QUIZ Q8 -->
+<div id="q8" class="page quiz-page">
+  <h1>🧭 Q8</h1>
+  <p>Who has better sense of direction?</p>
+  <button class="fancy-btn" onclick="correct(); go('q9')">Me 😎</button>
+  <button class="fancy-btn" onclick="go('q9')">Google Maps 🗺️</button>
+</div>
+
+<!-- QUIZ Q9 -->
+<div id="q9" class="page quiz-page">
+  <h1>😂 Q9</h1>
+  <p>Who is more dramatic?</p>
+  <button class="fancy-btn" onclick="go('q10')">Amias 😆</button>
+  <button class="fancy-btn" onclick="correct(); go('q10')">Farishta 😇</button>
+</div>
+
+<!-- QUIZ Q10 -->
+<div id="q10" class="page quiz-page">
+  <h1>😏 Q10</h1>
+  <p>Who gives best suggestions?</p>
+  <button class="fancy-btn" onclick="correct(); showResult()">Me 😎</button>
+  <button class="fancy-btn" onclick="showResult()">Internet 🌐</button>
+</div>
+
+<!-- RESULT -->
+<div id="result-page" class="page quiz-page">
+  <h1>📊 Your Report Card</h1>
+  <p id="result-text" class="result-text"></p>
+  <button class="fancy-btn" onclick="go('moon')">Next ➡️</button>
+</div>
+
+<!-- MOON PAGE -->
+<div id="moon" class="page quiz-page">
+  <h1>🌙 Moon Comparison</h1>
+  <h3>Moon before 3 June 2002</h3>
+  <img src="realImage.jpg" class="moon-img">
+  <h3>Moon after 3 June 2002</h3>
+  <img src="image.jpeg" class="moon-img">
+  <br>
+  <button class="fancy-btn" onclick="go('feel')">Next ➡️</button>
+</div>
+
+<!-- FEEL LOW PAGE -->
+<div id="feel" class="page quiz-page">
+  <h1>💙 For when you feel low</h1>
+  <p>Whenever you're sad... just pause and listen to one of your favourite songs 🌸<br>(or call me 🤗)</p>
+  <iframe src="https://www.youtube.com/embed/asUDUqgC2V8" allow="autoplay"></iframe>
+  <br><br>
+  <button class="fancy-btn" onclick="go('message')">Next ➡️</button>
+</div>
+
+<!-- MESSAGE PAGE -->
+<div id="message" class="page quiz-page">
+  <h1>💜 A Small Message</h1>
+  <p class="msg-text">
+    You are genuinely someone very special ✨<br><br>
+    Keep smiling, keep dancing 💃<br>
+    And never change the way you are 🌸
+  </p>
+  <button class="fancy-btn" onclick="go('poem')">Here's your gift 🎁</button>
+</div>
+
+<!-- POEM PAGE -->
+<div id="poem" class="page quiz-page">
+  <h1>💌 Here's a poem for you</h1>
+  <div class="poem">Mai aur meri tanhai aksar yeah baate karte hai
+
+Ki mai khoya sa ,tu mera rasta si
+Jab mai roya tha ,tu ek hasi si
+Mai soya tha ,tu khwab si
+
+Ki Mai koi bhool sa ,tu ek fool si
+Mere har gham ko ek marham si
+Mai gulab jamun sa tu pani puri si
+Meri adhuri kahani ko karne puri si
+Meri khamosi me ek shor si
+Mera dil churane aayi ek chor si 
+
+Ki mai hu akela tu saath thi
+Mai hu bawla sa tu hoshiyari si
+Mujh bhakt ke liye ek bhakti si
+Mai hu padhaku sa tu kitab si
+Meri saamaan zindagi me ek vardaan si
+
+Ki mai shaant sa tu sukoon shanti si
+Mai karta paap sa tu hai ek suniti si
+Mai kalm sa tu personal diary si
+Mere har shrap ke liye ek blessing si
+
+Mai insomniac sa tu sleeping beauty si
+Mai hu sawla sa tu hai gori si
+Mere har kadam par ek sanam si
+Mere andhere me chaand si
+Mai bin buddhi sa tu samruddhi si
+
+
+Mai aur meri tanhai aksar yeah baate karte hai 
+
+Ki kitna tanha rheta tha Mai ,tu meri zindagi me bahar banke aaya
+Mujhpe hi jokes sunake, tune mujhko hi hasaya
+
+Purple Theodore valentine blessing se bhi mujhko, tune hi milwaya
+Mere bure se samay Ko, tune 11:11 banaya
+
+Choti choti baato par Roya jab mai, tune mujhe lamha lamha samjhaya
+Kitni minnate karke Maine, tujhko yu kamaya
+
+Motki khe kar Maine, tujhko bhot chidaya
+Toh wordle khelte hue mera, tune bhi majak udaya
+
+Thick shake Peete Peete mujhko, tune mysore Tirupati na jaane kitna ghumaya
+Fashion sense dekh kar mera, tune zanwaro ka photo laya
+
+Jab bore hua mai,tab tune badi door se aaye hai dikhaya
+Phir mere lame jokes sunkar,tune bhot chillaya
+
+Mujhko geet Ramayan padwa pahad ke baare me batakar, tune Anand bhot dilaya
+Meri zindagi me aake, tune saare ghamo Ko bhulaya
+
+Meri harkate dekh kar bhi,tune dance yu karaya
+Phir maar maar ke mujhko, tune patience bhot azmaya
+
+Chand ko dekh kar mujhko, tera hi khayal bhaya
+Bhikhre se Dil Ko mere ,teri aakhon ne hi sul jhaya
+
+Maaf karna mujhko jo  ,tujhe itna sataya
+Maaf karna mujhko jo , tujhe kabhi rulaya
+Thank you bolke aakhir mujhko, kar deti tu kyu paraya
+
+Poem yeah likh kar Maine, tere sang promise nibhaya
+3 June Ko aakhir Maine, tera din manaya
+3 June Ko aakhir Maine, tera Dil lubhaya
+
+
+Mai aur meri tanhai aksar yeah baate karte hai</div>
 </div>
 
 <script src="script.js"></script>
