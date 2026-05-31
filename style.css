@@ -1,118 +1,167 @@
-body{
-  margin:0;
-  font-family:Arial;
-  background:#ffeef5;
-  text-align:center;
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #ffeef5;
+  text-align: center;
 }
 
-.page{ display:none; }
-.active{ display:block; }
+.page { display: none; }
+.active { display: block; }
 
-/* LOGIN */
-.login-container{
-  display:flex;
-  min-height:100vh;
+/* ── LOGIN ── */
+.login-container {
+  display: flex;
+  min-height: 100vh;
+}
+.left, .right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.left img {
+  width: 70%;
+  max-width: 300px;
+}
+#boxes span {
+  width: 25px;
+  height: 25px;
+  border: 2px solid black;
+  margin: 5px;
+  display: inline-block;
+}
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 60px);
+  gap: 10px;
+  margin-top: 10px;
+}
+.keypad button {
+  padding: 10px;
+  font-size: 16px;
 }
 
-.left, .right{
-  flex:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
+/* ── CAKE ── */
+.cake {
+  width: 260px;
+  height: 140px;
+  background: white;
+  margin: 60px auto 30px;
+  border-radius: 15px;
+  position: relative;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  /* FIX 1: clip dots inside the cake */
+  overflow: hidden;
 }
 
-.left img{
-  width:70%;
-  max-width:300px;
+/* FIX 1: dots rendered as absolute children inside .cake,
+   using JS so they stay within bounds */
+.cake-dots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: pink;
+}
+.dot:nth-child(even) {
+  background: lightblue;
 }
 
-#boxes span{
-  width:25px;
-  height:25px;
-  border:2px solid black;
-  margin:5px;
-  display:inline-block;
+/* ── CANDLES ── */
+.candles {
+  position: absolute;
+  top: -48px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  /* lift candles above cake overflow clip */
+  overflow: visible;
 }
 
-/* keypad */
-.keypad{
-  display:grid;
-  grid-template-columns:repeat(3,60px);
-  gap:10px;
-  margin-top:10px;
+.candle {
+  width: 12px;
+  height: 36px;
+  background: red;
+  border-radius: 3px;
+  position: relative;
+  /* FIX 2: candle itself never changes opacity */
+}
+.candle:nth-child(2) { background: blue; }
+.candle:nth-child(3) { background: green; }
+.candle:nth-child(4) { background: orange; }
+.candle:nth-child(5) { background: purple; }
+
+/* FIX 2: flame is a real child element, not ::after,
+   so we can hide ONLY the flame without touching the candle */
+.flame {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 12px;
+  background: radial-gradient(ellipse at bottom, #ffe066 0%, #ffaa00 60%, transparent 100%);
+  border-radius: 50% 50% 30% 30%;
+  box-shadow: 0 0 6px 2px rgba(255,200,0,0.6);
+  transition: opacity 0.4s ease;
 }
 
-.keypad button{
-  padding:10px;
-  font-size:16px;
+/* class added by JS when blown */
+.flame.out {
+  opacity: 0;
 }
 
-/* CAKE */
-.cake{
-  width:260px;
-  height:140px;
-  background:white;
-  margin:50px auto;
-  border-radius:15px;
-  position:relative;
-  box-shadow:0 5px 10px rgba(0,0,0,0.2);
+/* ── CAKE CUT PAGE ── */
+#cakeImg {
+  width: 280px;
+}
+#knife {
+  width: 90px;
+  position: absolute;
+  top: 300px;
+  left: 100px;
+  cursor: grab;
 }
 
-/* decoration */
-.cake::after{
-  content:"";
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:
-    radial-gradient(circle,pink 6px,transparent 7px),
-    radial-gradient(circle,lightblue 6px,transparent 7px);
-  background-size:30px 30px;
+/* ── BALLOONS ── */
+#balloons {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 999;
 }
 
-/* candles */
-.candles{
-  position:absolute;
-  top:-40px;
-  width:100%;
-  display:flex;
-  justify-content:space-around;
+.balloon {
+  position: absolute;
+  bottom: -120px;
+  width: 50px;
+  height: 65px;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  animation: floatUp 3.5s ease-in forwards;
+  opacity: 0.9;
 }
 
-.candle{
-  width:10px;
-  height:35px;
-  background:red;
-  border-radius:3px;
-  position:relative;
+.balloon::after {
+  content: "";
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 18px;
+  background: #aaa;
 }
 
-.candle:nth-child(2){background:blue;}
-.candle:nth-child(3){background:green;}
-.candle:nth-child(4){background:orange;}
-.candle:nth-child(5){background:purple;}
-
-.candle::after{
-  content:"";
-  position:absolute;
-  top:-10px;
-  left:2px;
-  width:6px;
-  height:10px;
-  background:yellow;
-  border-radius:50%;
-}
-
-/* cake + knife */
-#cakeImg{
-  width:280px;
-}
-
-#knife{
-  width:90px;
-  position:absolute;
-  top:300px;
-  left:100px;
-  cursor:grab;
+@keyframes floatUp {
+  0%   { bottom: -120px; opacity: 0.9; }
+  80%  { opacity: 0.9; }
+  100% { bottom: 110%; opacity: 0; }
 }
