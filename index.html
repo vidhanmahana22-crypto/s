@@ -3,17 +3,16 @@
 <head>
   <title>Birthday Surprise</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="loginPage" class="page active">
   <div class="login-container">
-    <div class="left">
-      <img src="image.jpeg">
-    </div>
+    <div class="left"><img src="image.jpeg"></div>
     <div class="right">
-      <h2>Login</h2>
+      <h2>Enter PIN 🔐</h2>
       <div id="boxes">
         <span></span><span></span><span></span><span></span>
       </div>
@@ -38,35 +37,39 @@
 
 <!-- BIRTHDAY -->
 <div id="birthday" class="page">
-  <h1>🎉 Happy Birthday Samu</h1>
-  <button onclick="go('candles')">Start 🎂</button>
+  <div class="bday-container">
+    <h1>🎉 Happy Birthday<br><span class="name">Samu</span></h1>
+    <p class="subtitle">I made something special just for you ✨</p>
+    <button class="fancy-btn" onclick="go('candles')">Start 🎂</button>
+  </div>
 </div>
 
 <!-- CANDLES -->
 <div id="candles" class="page">
-  <h2>Make a wish ✨</h2>
-  <div class="cake">
-    <div class="candles">
-      <div class="candle"><div class="flame"></div></div>
-      <div class="candle"><div class="flame"></div></div>
-      <div class="candle"><div class="flame"></div></div>
-      <div class="candle"><div class="flame"></div></div>
-      <div class="candle"><div class="flame"></div></div>
+  <h2 class="wish-title">Make a wish ✨</h2>
+  <div class="cake-scene">
+    <!-- candles sit ABOVE cake, absolutely positioned -->
+    <div class="candles-above">
+      <div class="candle" style="background:red">  <div class="flame"></div></div>
+      <div class="candle" style="background:blue"> <div class="flame"></div></div>
+      <div class="candle" style="background:green"><div class="flame"></div></div>
+      <div class="candle" style="background:orange"><div class="flame"></div></div>
+      <div class="candle" style="background:purple"><div class="flame"></div></div>
     </div>
-    <!-- Dots rendered via JS to stay inside cake -->
-    <div class="cake-dots" id="cakeDots"></div>
+    <div class="cake">
+      <div class="cake-dots" id="cakeDots"></div>
+    </div>
   </div>
-  <button onclick="blow()">Blow</button>
+  <button class="fancy-btn" onclick="blow()">🌬️ Blow</button>
 </div>
 
 <!-- CAKE CUT -->
 <div id="cut" class="page">
-  <h2>Cut the cake 🎂</h2>
+  <h2 class="wish-title">Cut the cake 🎂</h2>
   <img id="cakeImg" src="cake.jpeg">
   <img id="knife" src="knife.jpeg">
   <h3 id="yay" style="display:none;">Yay 🎉</h3>
-  <button id="nextBtn" style="display:none;" onclick="go('quiz')">Next</button>
-  <!-- Balloons container -->
+  <button id="nextBtn" class="fancy-btn" style="display:none;" onclick="go('quiz')">Next ➡️</button>
   <div id="balloons"></div>
 </div>
 
