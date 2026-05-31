@@ -1,12 +1,13 @@
+/* ── GLOBAL ── */
+* { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: Arial;
+  font-family: 'Nunito', Arial, sans-serif;
   background: #ffeef5;
   text-align: center;
 }
-
-.page { display: none; }
-.active { display: block; }
+.page  { display: none; }
+.active{ display: block; }
 
 /* ── LOGIN ── */
 .login-container {
@@ -19,149 +20,213 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding: 20px;
 }
-.left img {
-  width: 70%;
-  max-width: 300px;
+.left img { width: 70%; max-width: 300px; border-radius: 16px; }
+
+.right h2 {
+  font-family: 'Pacifico', cursive;
+  color: #e75480;
+  font-size: 1.6rem;
+  margin-bottom: 16px;
 }
 #boxes span {
-  width: 25px;
-  height: 25px;
-  border: 2px solid black;
+  width: 28px; height: 28px;
+  border: 2.5px solid #e75480;
+  border-radius: 6px;
   margin: 5px;
   display: inline-block;
+  background: white;
+  transition: background 0.2s;
 }
 .keypad {
   display: grid;
-  grid-template-columns: repeat(3, 60px);
+  grid-template-columns: repeat(3, 64px);
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 14px;
 }
 .keypad button {
-  padding: 10px;
-  font-size: 16px;
+  padding: 12px;
+  font-size: 17px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  border: 2px solid #f7a8c4;
+  border-radius: 10px;
+  background: white;
+  color: #c0395e;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.keypad button:hover  { background: #ffe0ed; }
+.keypad button:active { transform: scale(0.94); }
+
+#msg {
+  color: #c0395e;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  font-weight: 600;
+  min-height: 20px;
 }
 
-/* ── CAKE ── */
+/* ── BIRTHDAY PAGE ── */
+.bday-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 16px;
+  background: linear-gradient(135deg, #fff0f6 0%, #ffd6e7 100%);
+}
+.bday-container h1 {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.8rem;
+  color: #c0395e;
+  margin: 0;
+  line-height: 1.3;
+}
+.bday-container h1 .name {
+  font-size: 3.4rem;
+  color: #e75480;
+  text-shadow: 2px 3px 0px #ffb3cd;
+}
+.subtitle {
+  font-size: 1.2rem;
+  color: #d4627e;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ── FANCY BUTTON ── */
+.fancy-btn {
+  margin-top: 20px;
+  padding: 14px 36px;
+  font-size: 1.1rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ff6fa3, #e75480);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(231, 84, 128, 0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.fancy-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(231,84,128,0.5); }
+.fancy-btn:active { transform: scale(0.97); }
+
+/* ── CANDLES PAGE ── */
+.wish-title {
+  font-family: 'Pacifico', cursive;
+  color: #c0395e;
+  font-size: 1.8rem;
+  margin: 30px 0 0;
+}
+
+/* scene: wrapper with extra top padding for candles */
+.cake-scene {
+  display: inline-block;
+  position: relative;
+  margin-top: 20px;
+  padding-top: 55px;   /* space for candles above cake */
+}
+
+/* candles row: absolutely placed above cake */
+.candles-above {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 14px;
+  align-items: flex-end;   /* bottoms of candles touch cake top */
+}
+
+.candle {
+  width: 13px;
+  height: 38px;
+  border-radius: 4px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* FLAME — real child div so JS targets only this */
+.flame {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 9px;
+  height: 14px;
+  background: radial-gradient(ellipse at bottom, #fff59d 0%, #ffb300 55%, #ff6f00 100%);
+  border-radius: 50% 50% 30% 30%;
+  box-shadow: 0 0 8px 3px rgba(255, 180, 0, 0.8);
+  transition: opacity 0.4s ease;
+}
+.flame.out {
+  opacity: 0;
+  box-shadow: none;
+}
+
+/* CAKE */
 .cake {
   width: 260px;
   height: 140px;
   background: white;
-  margin: 60px auto 30px;
-  border-radius: 15px;
+  border-radius: 18px;
   position: relative;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-  /* FIX 1: clip dots inside the cake */
   overflow: hidden;
+  box-shadow: 0 6px 20px rgba(200, 80, 120, 0.2);
+  border: 2px solid #ffd6e7;
 }
-
-/* FIX 1: dots rendered as absolute children inside .cake,
-   using JS so they stay within bounds */
-.cake-dots {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
+.cake-dots { position: absolute; inset: 0; pointer-events: none; }
 .dot {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
-  background: pink;
-}
-.dot:nth-child(even) {
-  background: lightblue;
-}
-
-/* ── CANDLES ── */
-.candles {
-  position: absolute;
-  top: -48px;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  /* lift candles above cake overflow clip */
-  overflow: visible;
-}
-
-.candle {
-  width: 12px;
-  height: 36px;
-  background: red;
-  border-radius: 3px;
-  position: relative;
-  /* FIX 2: candle itself never changes opacity */
-}
-.candle:nth-child(2) { background: blue; }
-.candle:nth-child(3) { background: green; }
-.candle:nth-child(4) { background: orange; }
-.candle:nth-child(5) { background: purple; }
-
-/* FIX 2: flame is a real child element, not ::after,
-   so we can hide ONLY the flame without touching the candle */
-.flame {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 12px;
-  background: radial-gradient(ellipse at bottom, #ffe066 0%, #ffaa00 60%, transparent 100%);
-  border-radius: 50% 50% 30% 30%;
-  box-shadow: 0 0 6px 2px rgba(255,200,0,0.6);
-  transition: opacity 0.4s ease;
-}
-
-/* class added by JS when blown */
-.flame.out {
-  opacity: 0;
+  transform: translate(-50%, -50%);
 }
 
 /* ── CAKE CUT PAGE ── */
-#cakeImg {
-  width: 280px;
-}
+#cakeImg { width: 280px; display: block; margin: 10px auto; }
 #knife {
   width: 90px;
   position: absolute;
-  top: 300px;
-  left: 100px;
+  top: 300px; left: 100px;
   cursor: grab;
+}
+#yay {
+  font-family: 'Pacifico', cursive;
+  color: #e75480;
+  font-size: 2rem;
 }
 
 /* ── BALLOONS ── */
 #balloons {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  inset: 0;
   pointer-events: none;
   overflow: hidden;
   z-index: 999;
 }
-
 .balloon {
   position: absolute;
-  bottom: -120px;
-  width: 50px;
-  height: 65px;
+  bottom: -130px;
   border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-  animation: floatUp 3.5s ease-in forwards;
-  opacity: 0.9;
+  animation: floatUp linear forwards;
 }
-
 .balloon::after {
   content: "";
   position: absolute;
-  bottom: -18px;
-  left: 50%;
+  bottom: -18px; left: 50%;
   transform: translateX(-50%);
-  width: 1px;
-  height: 18px;
+  width: 1px; height: 18px;
   background: #aaa;
 }
-
 @keyframes floatUp {
-  0%   { bottom: -120px; opacity: 0.9; }
-  80%  { opacity: 0.9; }
-  100% { bottom: 110%; opacity: 0; }
+  0%   { bottom: -130px; opacity: 1; }
+  85%  { opacity: 0.9; }
+  100% { bottom: 108%; opacity: 0; }
 }
