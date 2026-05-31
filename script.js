@@ -8,12 +8,12 @@ window.addEventListener("resize", () => {
   canvas.height = window.innerHeight;
 });
 let particles = [];
-for (let i = 0; i < 90; i++) {
+for (let i = 0; i < 150; i++)) {
   particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 2 });
 }
 function drawBg() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "rgba(255,153,204,0.55)";
+  ctx.fillStyle = "rgba(255,153,204,0.8)";
   particles.forEach(p => {
     ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
     p.y += 0.4;
