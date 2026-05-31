@@ -151,10 +151,13 @@ canvas {
 
 /* ── CANDLES PAGE ── */
 .candles-page {
-  display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
+}
+
+.candles-page.active {
+  display: flex;
 }
 .wish-title-pink {
   font-family: 'Pacifico', cursive;
